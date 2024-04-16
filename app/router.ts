@@ -15,6 +15,8 @@ Router.map(function () {
     this.route('logout');
     this.route('switch');
   });
+  this.route('mock-login');
+  this.route('lougout');
 
   // this.route('agenda-items', { path: '/agendapunten' }, function () {
   //   this.route('agenda-item', { path: '/:id' });

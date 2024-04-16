@@ -44,6 +44,7 @@
     "@embroider/webpack": "^3.1.4",
     "@glimmer/component": "^1.1.2",
     "@glimmer/tracking": "^1.1.2",
+    "@lblod/ember-mock-login": "^0.10.0",
     "@release-it-plugins/lerna-changelog": "^6.0.0",
     "@tsconfig/ember": "^2.0.0",
     "@types/ember": "^4.0.3",
