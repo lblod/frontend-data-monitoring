@@ -8,4 +8,24 @@
       Meer info
     </AuLink>
   </li>
+  <li class="au-c-list-horizontal__item">
+    {{#if this.session.isAuthenticated}}
+      <AuDropdown
+        @title={{concat this.currentSession.fullName " - " this.currentSession.groupClassification.label " " this.currentSession.group.name }}
+        @buttonLabel="Account settings"
+        @alignment="right"
+        role="menu"
+      >
+        <AuLink role="menuitem" @route="auth.switch" @icon="switch">
+          Wissel van bestuurseenheid
+        </AuLink>
+
+        <AuLink @route="auth.logout" @icon="logout" role="menuitem">
+          Afmelden
+        </AuLink>
+      </AuDropdown>
+    {{else}}
+      <LoginButton @isCompact={{true}} />
+    {{/if}}
+  </li>
 </AuMainHeader>

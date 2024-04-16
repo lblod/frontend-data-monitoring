@@ -2,12 +2,15 @@ import Route from '@ember/routing/route';
 import { service } from '@ember/service';
 import type PlausibleService from 'ember-plausible/services/plausible';
 import config from 'frontend-data-monitoring/config/environment';
+import LoketSessionService from 'frontend-data-monitoring/services/session';
 
 export default class ApplicationRoute extends Route {
   @service declare plausible: PlausibleService;
+  @service declare session: LoketSessionService;
 
-  beforeModel(): void {
+  async beforeModel(): Promise<void> {
     this.startAnalytics();
+    await this.session.setup();
   }
 
   startAnalytics(): void {

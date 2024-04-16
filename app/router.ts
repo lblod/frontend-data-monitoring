@@ -8,6 +8,13 @@ export default class Router extends EmbroiderRouter {
 
 Router.map(function () {
   this.route('home', { path: '/' });
+  this.route('auth', { path: '/authorization' }, function () {
+    this.route('callback');
+    this.route('callback-error');
+    this.route('login');
+    this.route('logout');
+    this.route('switch');
+  });
 
   // this.route('agenda-items', { path: '/agendapunten' }, function () {
   //   this.route('agenda-item', { path: '/:id' });

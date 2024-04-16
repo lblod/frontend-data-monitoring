@@ -2,6 +2,15 @@
  * Type declarations for
  *    import config from 'my-app/config/environment'
  */
+type AcmidmParams = {
+  clientId: string;
+  scope: string;
+  authUrl: string;
+  logoutUrl: string;
+  authRedirectUrl: string;
+  switchRedirectUrl: string;
+};
+
 declare const config: {
   environment: string;
   modulePrefix: string;
@@ -14,6 +23,8 @@ declare const config: {
     domain: string;
   };
   features: Record<string, boolean | string>;
+  acmidm: AcmidmParams;
 };
 
 export default config;
+export { AcmidmParams };
