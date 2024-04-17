@@ -3,5 +3,5 @@ dist
 .travis.yml
 *.log
 */.DS_Store
-
+*.sparqlbook
 /.eslintcache
