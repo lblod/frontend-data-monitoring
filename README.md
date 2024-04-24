@@ -121,8 +121,7 @@ Or in template files by using the `is-feature-enabled` helper:
 
 | Name              | Description                                                     |
 | ----------------- | --------------------------------------------------------------- |
-| PLAUSIBLE_APIHOST | The domain where the plausible.js can be found                  |
-| PLAUSIBLE_DOMAIN  | The domain that has been configured to be tracked. If undefined |
+| ? | ? |
 
 ### styles/ naming scheme
 

@@ -5,16 +5,9 @@ module.exports = function (environment) {
     modulePrefix: 'frontend-data-monitoring',
     environment,
     rootURL: '/',
-    locationType: 'history', // If updated to hash, change ember-plausible config
+    locationType: 'history',
     EmberENV: {
       EXTEND_PROTOTYPES: false,
-    },
-    'ember-plausible': {
-      enabled: false, // We enable this manually when the config is provided by the server
-    },
-    plausible: {
-      apiHost: '{{PLAUSIBLE_APIHOST}}',
-      domain: '{{PLAUSIBLE_DOMAIN}}',
     },
     acmidm: {
       clientId: '{{OAUTH_API_KEY}}',
