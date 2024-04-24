@@ -5,47 +5,41 @@
     <AuContent class="au-u-3-4@medium">
       <AuHeading>Mock login</AuHeading>
       <MockLogin as |loginComponent|>
-      {{#if loginComponent.isLoading}}
+        {{#if loginComponent.isLoading}}
         <AuLoader />
-      {{else}}
+        {{else}}
         {{#if loginComponent.errorMessage}}
-          {{loginComponent.errorMessage}}
+          <p>{{loginComponent.errorMessage}}</p>
         {{/if}}
         <AuHeading @skin="4">Kies een bestuurseenheid om mee in te loggen.</AuHeading>
         <p class="au-u-margin-top-small au-u-margin-bottom">
-          {{#let (this.generateUuid) as |id|}}
-            <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
-            <input
-              class="au-c-input au-c-input--block js-js-input-pattern-bound"
-              id={{id}}
-              placeholder="Aalst, Berchem, ..."
-              value={{this.gemeente}}
-              oninput={{perform this.updateSearch value="target.value"}}
-            />
+          {{#let (uuid) as |id|}}
+          <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
+          <input
+            class="au-c-input au-c-input--block js-js-input-pattern-bound"
+            id={{(uuid)}}
+            placeholder="Aalst, Berchem, ..."
+            value={{this.gemeente}} oninput={{perform this.updateSearch
+            value="target.value" }}
+          />
           {{/let}}
         </p>
-        <ul>
-          {{#each this.accounts as |account|}}
-            <li>
-              <div
-                class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-small"
-              >
-                <AuButton @skin="link" {{on "click" (fn loginComponent.login account)}}>
-                  <strong>{{account.user.fullName}}</strong>
-                </AuButton>
-              </div>
-            </li>
-          {{/each}}
-        </ul>
-      {{/if}}
-      <AuDataTableNumberPagination
-        @page={{this.page}}
-        @size={{this.size}}
-        @nbOfItems={{this.accounts.length}}
-        @total={{this.accounts.meta.count}}
-        @links={{this.accounts.meta.pagination}}
-      />
-    </MockLogin>
+        {{#each this.model as |account|}}
+        <div class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-tiny">
+          <AuButton @skin="link" {{on "click" (fn loginComponent.login account)}}>
+            <strong>{{account.user.fullName}}</strong>
+          </AuButton>
+        </div>
+        {{/each}}
+        {{/if}}
+        <AuDataTableNumberPagination
+          @page={{this.page}}
+          @size={{this.size}}
+          @nbOfItems={{this.model.length}}
+          @total={{this.model.meta.count}}
+          @links={{this.model.meta.pagination}}
+        />
+      </MockLogin>
     </AuContent>
   </div>
 </div>

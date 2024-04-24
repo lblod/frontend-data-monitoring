@@ -17,6 +17,7 @@ export default class MockLoginComponent extends Component {
   @action
   async login(account: AccountModel) {
     console.log('mock-login call', { account });
+    this.isRunning = true;
     const user = await account.user;
     const groups = (await user.groups) as unknown;
     const group = (groups as AdministrativeUnitModel[])[0];
@@ -29,7 +30,6 @@ export default class MockLoginComponent extends Component {
     const accountId = account.id;
     const groupId = group.id;
     this.errorMessage = '';
-    this.isRunning = true;
 
     try {
       await this.session.authenticate(

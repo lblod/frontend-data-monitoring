@@ -7,7 +7,6 @@ import LoketSessionService from 'frontend-data-monitoring/services/loket-session
 import Store from '@ember-data/store';
 import AccountModel from 'frontend-data-monitoring/models/account';
 
-import { v4 as uuidv4 } from 'uuid';
 import { DS } from 'ember-data';
 
 export default class MockLoginController extends Controller {
@@ -17,10 +16,12 @@ export default class MockLoginController extends Controller {
   queryParams = ['gemeente', 'page'];
   size = 10;
 
-  @tracked accounts: DS.AdapterPopulatedRecordArray<AccountModel> | undefined =
-    undefined;
   @tracked gemeente = '';
   @tracked page = 0;
+
+  @tracked declare model:
+    | DS.AdapterPopulatedRecordArray<AccountModel>
+    | undefined;
 
   queryStore = task(async () => {
     // This code needs a refactor. Copied code from contactgegevens not correct
@@ -45,11 +46,6 @@ export default class MockLoginController extends Controller {
     await timeout(500); // Debounce
     this.page = 0;
     this.gemeente = value;
-
-    this.accounts = await this.queryStore.perform();
+    this.model = await this.queryStore.perform();
   });
-
-  generateUuid() {
-    return uuidv4();
-  }
 }

@@ -1,11 +1,5 @@
 @use "sass:map";
 
-// with name JSD widget
-iframe[name*="JSD widget"] {
-  bottom: 100px !important;
-  right: 20px !important;
-}
-
 .graph-bar-container {
   height: 25px;
   position: relative;
@@ -34,33 +28,6 @@ iframe[name*="JSD widget"] {
   text-align: end;
   padding-right: 10px;
   padding-left: 10px;
-}
-
-// Add ol styles
-ol {
-  counter-reset: item;
-
-  > li {
-    display: flex;
-    gap: $au-unit-small;
-    flex-wrap: nowrap;
-    padding-inline-start: $au-unit-tiny;
-    list-style-type: none;
-    counter-increment: item;
-  }
-
-  > li + li {
-    margin-top: $au-unit-small;
-  }
-
-  > li::before {
-    display: block;
-    font-weight: var(--au-medium);
-    content: counter(item) ".";
-    text-align: right;
-    width: $au-unit;
-    flex-shrink: 0;
-  }
 }
 
 // Extend region class
@@ -346,4 +313,10 @@ ol {
 // Related to BNB-452 CommentId=97815
 .ember-power-select-multiple-options li {
   list-style: none;
+}
+
+// Error in rendering au data table number container thing
+ul.au-c-pagination__list > li {
+  margin-top: 6px;
+  list-style-type: none;
 }
