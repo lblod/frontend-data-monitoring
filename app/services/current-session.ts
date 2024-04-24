@@ -1,6 +1,6 @@
 import Service, { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import LoketSessionService from './session';
+import LoketSessionService from './loket-session';
 import type Store from '@ember-data/store';
 import AccountModel from 'frontend-data-monitoring/models/account';
 import UserModel from 'frontend-data-monitoring/models/user';
@@ -59,7 +59,7 @@ export default class CurrentSessionService extends Service {
     }
   }
 
-  get isMockLogin() {
+  get isMockLoginSession() {
     return this.session.isMockLoginSession;
   }
 

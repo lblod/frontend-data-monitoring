@@ -1,7 +1,7 @@
 import Store from '@ember-data/store';
 import Route from '@ember/routing/route';
 import RouterService from '@ember/routing/router-service';
-import LoketSessionService from 'frontend-data-monitoring/services/session';
+import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 import { inject as service } from '@ember/service';
 
 type MockLoginRouteParams = {

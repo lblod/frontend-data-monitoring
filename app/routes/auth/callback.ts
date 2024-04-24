@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import RouterService from '@ember/routing/router-service';
 import { inject as service } from '@ember/service';
-import LoketSessionService from 'frontend-data-monitoring/services/session';
+import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 
 type AuthCallbackRouteParams = {
   code: string;

@@ -3,17 +3,17 @@ import RouterService from '@ember/routing/router-service';
 import Transition from '@ember/routing/transition';
 import { inject as service } from '@ember/service';
 import ENV, { AcmidmParams } from 'frontend-data-monitoring/config/environment';
-import LoketSessionService from 'frontend-data-monitoring/services/session';
+import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 
 export default class AuthSwitchRoute extends Route {
   @service declare router: RouterService;
-  @service declare session: LoketSessionService;
+  @service declare loketSession: LoketSessionService;
 
   async beforeModel(transition: Transition<unknown>) {
-    this.session.requireAuthentication(transition, 'login');
+    this.loketSession.requireAuthentication(transition, 'login');
     try {
-      const wasMockLoginSession = this.session.isMockLoginSession;
-      await this.session.invalidate();
+      const wasMockLoginSession = this.loketSession.isMockLoginSession;
+      await this.loketSession.invalidate();
       const logoutUrl = wasMockLoginSession
         ? this.router.urlFor('mock-login')
         : buildSwitchUrl(ENV.acmidm);
@@ -21,7 +21,7 @@ export default class AuthSwitchRoute extends Route {
       window.location.replace(logoutUrl);
     } catch (error) {
       throw new Error(
-        `Something went wrong while trying to remove the session on the server\n${error}`
+        `Something went wrong while trying to remove the loketSession on the server\n${error}`
       );
     }
   }

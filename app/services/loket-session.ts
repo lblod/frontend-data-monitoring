@@ -1,15 +1,20 @@
 import { inject as service } from '@ember/service';
 import CurrentSessionService from './current-session';
 import SessionService from 'ember-simple-auth/services/session';
+import { tracked } from '@glimmer/tracking';
 
 // TODO: eslint disable. This code was adapted from JS. Session data type not known yet. Type needs to be defined
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export default class LoketSessionService extends SessionService<any> {
   @service declare currentSession: CurrentSessionService;
 
-  get isMockLoginSession() {
+  get isMockLoginSession(): boolean {
+    console.log(
+      'isMockLoginSession getter from session',
+      this.data.authenticated.authenticator
+    );
     return this.isAuthenticated
-      ? this.data.authenticated.authenticator.includes('mock-login')
+      ? this.data.authenticated.authenticator === 'authenticator:mock-login'
       : false;
   }
 

@@ -3,7 +3,7 @@ import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
 import { task, timeout } from 'ember-concurrency';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
-import LoketSessionService from 'frontend-data-monitoring/services/session';
+import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 import Store from '@ember-data/store';
 import AccountModel from 'frontend-data-monitoring/models/account';
 

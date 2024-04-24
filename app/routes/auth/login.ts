@@ -1,7 +1,7 @@
 import Route from '@ember/routing/route';
 import { inject as service } from '@ember/service';
 import ENV, { AcmidmParams } from 'frontend-data-monitoring/config/environment';
-import LoketSessionService from 'frontend-data-monitoring/services/session';
+import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 
 export default class AuthLoginRoute extends Route {
   @service declare session: LoketSessionService;

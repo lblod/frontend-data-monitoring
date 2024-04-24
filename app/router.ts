@@ -7,6 +7,8 @@ export default class Router extends EmbroiderRouter {
 }
 
 Router.map(function () {
+  this.route('index', { path: '/' }); // Public facing page suggesting login
+
   this.route('home', { path: '/data-monitoring' }, function () {
     this.route('org', { path: '/organisatie' });
     this.route('overview', { path: '/overzicht' });
@@ -19,11 +21,6 @@ Router.map(function () {
     this.route('switch');
   });
   this.route('mock-login');
-  this.route('lougout');
-
-  this.route('index', { path: '/' }); // Public facing page suggesting login
-
-  this.route('four-oh-four', { path: '/*path' });
 
   this.route('disclaimer');
   this.route('help');
@@ -31,5 +28,5 @@ Router.map(function () {
   this.route('accessibility-statement', {
     path: '/toegankelijkheidsverklaring',
   });
-  // this.route('data-quality', { path: '/data-kwaliteit' });
+  this.route('four-oh-four', { path: '/*path' });
 });

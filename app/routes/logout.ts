@@ -3,7 +3,7 @@ import RouterService from '@ember/routing/router-service';
 import Transition from '@ember/routing/transition';
 import { inject as service } from '@ember/service';
 import ENV from 'frontend-data-monitoring/config/environment';
-import LoketSessionService from 'frontend-data-monitoring/services/session';
+import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 
 export default class AuthLogoutRoute extends Route {
   @service declare router: RouterService;

@@ -1,13 +1,11 @@
 import Route from '@ember/routing/route';
 import RouterService from '@ember/routing/router-service';
-import Transition from '@ember/routing/transition';
 import { service } from '@ember/service';
 import type PlausibleService from 'ember-plausible/services/plausible';
-import config from 'frontend-data-monitoring/config/environment';
 import CurrentSessionService, {
   Role,
 } from 'frontend-data-monitoring/services/current-session';
-import LoketSessionService from 'frontend-data-monitoring/services/session';
+import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 
 export default class ApplicationRoute extends Route {
   @service declare plausible: PlausibleService;
@@ -15,11 +13,10 @@ export default class ApplicationRoute extends Route {
   @service declare currentSession: CurrentSessionService;
   @service declare router: RouterService;
 
-  async beforeModel(transition: Transition): Promise<void> {
-    this.startAnalytics();
+  async beforeModel(): Promise<void> {
+    // TODO: uninstall plausible
     await this.session.setup();
     await this.currentSession.load();
-    this.session.requireAuthentication(transition, 'login');
     if (this.session.isAuthenticated) {
       if (this.currentSession.checkRole(Role.OrgUser)) {
         this.router.transitionTo('home.org');
@@ -34,17 +31,6 @@ export default class ApplicationRoute extends Route {
         );
       }
       return;
-    }
-  }
-
-  startAnalytics(): void {
-    const { domain, apiHost } = config.plausible;
-
-    if (!domain.startsWith('{{') && !apiHost.startsWith('{{')) {
-      this.plausible.enable({
-        domain,
-        apiHost,
-      });
     }
   }
 }
