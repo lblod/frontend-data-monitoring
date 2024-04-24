@@ -7,7 +7,10 @@ export default class Router extends EmbroiderRouter {
 }
 
 Router.map(function () {
-  this.route('home', { path: '/' });
+  this.route('home', { path: '/data-monitoring' }, function () {
+    this.route('org', { path: '/organisatie' });
+    this.route('overview', { path: '/overzicht' });
+  }); // Home page after having logged in
   this.route('auth', { path: '/authorization' }, function () {
     this.route('callback');
     this.route('callback-error');
@@ -18,14 +21,8 @@ Router.map(function () {
   this.route('mock-login');
   this.route('lougout');
 
-  // this.route('agenda-items', { path: '/agendapunten' }, function () {
-  //   this.route('agenda-item', { path: '/:id' });
-  //   this.route('session', { path: '/:id/zitting' });
-  // });
+  this.route('index', { path: '/' }); // Public facing page suggesting login
 
-  // this.route('sessions', { path: '/zittingen' }, function () {
-  //   this.route('session', { path: '/:session_id' });
-  // });
   this.route('four-oh-four', { path: '/*path' });
 
   this.route('disclaimer');

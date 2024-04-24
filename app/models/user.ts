@@ -16,7 +16,8 @@ export default class UserModel extends Model {
   declare groups: AsyncHasMany<AdministrativeUnitModel>;
 
   get group() {
-    return this.get('groups').firstObject;
+    const groups = this.get('groups') as AdministrativeUnitModel[];
+    return groups[0];
   }
 
   // used for mock login

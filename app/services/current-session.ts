@@ -7,6 +7,23 @@ import UserModel from 'frontend-data-monitoring/models/user';
 import AdministrativeUnitClasssificationCodeModel from 'frontend-data-monitoring/models/administrative-unit-classification-code';
 import AdministrativeUnitModel from 'frontend-data-monitoring/models/administrative-unit';
 
+export enum Role {
+  Public,
+  OrgUser,
+  SupplierUser,
+  AbbUser,
+}
+
+const ROLE_MAPPING: Record<string, Role> = {
+  'LoketLB-ContactOrganisatiegegevensGebruiker': Role.OrgUser, // Needs to be changed. Mistake in mock login generation in dispatch
+  'DM-LeveranciersGebruiker': Role.SupplierUser,
+  'DM-AbbGebruiker': Role.AbbUser,
+} as const;
+
+function convertRole(input: string): Role {
+  return ROLE_MAPPING[input] ?? Role.Public;
+}
+
 export default class CurrentSessionService extends Service {
   @service declare session: LoketSessionService;
   @service declare store: Store;
@@ -16,9 +33,10 @@ export default class CurrentSessionService extends Service {
   @tracked declare group: AdministrativeUnitModel;
   @tracked
   declare groupClassification: AdministrativeUnitClasssificationCodeModel;
-  @tracked roles = [];
+  @tracked roles: Role[] = [];
 
   async load() {
+    console.log('load', { auth: this.session.isAuthenticated });
     if (this.session.isAuthenticated) {
       const accountId =
         this.session.data.authenticated.relationships.account.data.id;
@@ -27,7 +45,10 @@ export default class CurrentSessionService extends Service {
       });
 
       this.user = await this.account.user;
-      this.roles = this.session.data.authenticated.data.attributes.roles;
+      const roles = this.session.data.authenticated.data.attributes.roles as
+        | string[]
+        | undefined;
+      this.roles = roles ? roles.map(convertRole) : [Role.Public];
 
       const groupId =
         this.session.data.authenticated.relationships.group.data.id;
@@ -38,8 +59,8 @@ export default class CurrentSessionService extends Service {
     }
   }
 
-  get canEdit() {
-    return true; // TODO: for demo purposes only -> change asap
+  get isMockLogin() {
+    return this.session.isMockLoginSession;
   }
 
   get fullName() {
@@ -50,6 +71,10 @@ export default class CurrentSessionService extends Service {
     return this.groupClassification
       ? this.groupClassification.label
       : 'Classificatie aan het laden';
+  }
+
+  checkRole(role: Role): boolean {
+    return this.roles.includes(role);
   }
 }
 
