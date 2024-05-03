@@ -6,31 +6,36 @@
       <AuHeading>Mock login</AuHeading>
       <MockLogin as |loginComponent|>
         {{#if loginComponent.isLoading}}
-        <AuLoader />
+          <AuLoader />
         {{else}}
-        {{#if loginComponent.errorMessage}}
-          <p>{{loginComponent.errorMessage}}</p>
-        {{/if}}
-        <AuHeading @skin="4">Kies een bestuurseenheid om mee in te loggen.</AuHeading>
-        <p class="au-u-margin-top-small au-u-margin-bottom">
-          {{#let (uuid) as |id|}}
-          <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
-          <input
-            class="au-c-input au-c-input--block js-js-input-pattern-bound"
-            id={{(uuid)}}
-            placeholder="Aalst, Berchem, ..."
-            value={{this.gemeente}} oninput={{perform this.updateSearch
-            value="target.value" }}
-          />
-          {{/let}}
-        </p>
-        {{#each this.model as |account|}}
-        <div class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-tiny">
-          <AuButton @skin="link" {{on "click" (fn loginComponent.login account)}}>
-            <strong>{{account.user.fullName}}</strong>
-          </AuButton>
-        </div>
-        {{/each}}
+          {{#if loginComponent.errorMessage}}
+            <p>{{loginComponent.errorMessage}}</p>
+          {{/if}}
+          <AuHeading @skin="4">Kies een bestuurseenheid om mee in te loggen.</AuHeading>
+          <p class="au-u-margin-top-small au-u-margin-bottom">
+            {{#let (uuid) as |id|}}
+              <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
+              <input
+                class="au-c-input au-c-input--block js-js-input-pattern-bound"
+                id={{(uuid)}}
+                placeholder="Aalst, Berchem, ..."
+                value={{this.gemeente}}
+                oninput={{perform this.updateSearch value="target.value"}}
+              />
+            {{/let}}
+          </p>
+          {{#each this.model as |account|}}
+            <div
+              class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-tiny"
+            >
+              <AuButton
+                @skin="link"
+                {{on "click" (fn loginComponent.login account)}}
+              >
+                <strong>{{account.user.fullName}}</strong>
+              </AuButton>
+            </div>
+          {{/each}}
         {{/if}}
         <AuDataTableNumberPagination
           @page={{this.page}}

@@ -1,10 +1,207 @@
-<AuContent>
-  <AuHeading @level="1" @skin="2">Voorbeeld pagina organisatie rapport</AuHeading>
-  <p>Applicatie in ontwikkeling</p>
-  {{log "qsldkfjqsmldfkjqsmldkf 1"}}
-  <p>Roles: {{this.roles}}</p>
-  {{log "qsldkfjqsmldfkjqsmldkf 2"}}
-  {{!-- <p>Mocklogin: {{if this.isMockLogin "Ja" "nee"}}</p> --}}
-  {{log "qsldkfjqsmldfkjqsmldkf 3"}}
-  <p>Test: {{if this.loketSession.isMockLoginSession "Ja" "Nee"}}</p>
-</AuContent>
+<div class="c-interface">
+  <div
+    id="filtercontent"
+    class="c-interface__content au-u-flex au-u-flex--column"
+  >
+
+    <AuContent class="au-o-flow au-o-flow--small au-u-padding">
+      <section class="au-u-flex au-u-flex--between">
+        <AuHeading
+          @level="1"
+          @skin="2"
+        >{{this.currentSession.fullName}}</AuHeading>
+        <AuButton>Exporteer rapport</AuButton>
+      </section>
+      <section class="au-u-flex au-u-flex--between">
+        <span>
+          <p>
+            De data voor de monitoringstool wordt verzameld uit de door lokale
+            overheden gepubliceerde datasets.
+          </p>
+        </span>
+        <AuPill @icon="renew">Laatste harvesting op
+          {{this.model.lastHarvestingDate}}</AuPill>
+      </section>
+      <section class="au-u-text-right">
+        <span
+          class="au-u-flex au-u-flex--column au-u-text-right au-u-flex--end"
+        >
+          <p>
+            Zie je een fout in de data?
+          </p>
+          <AuLinkExternal
+            class="au-u-flex--end au-u-flex-self-end"
+            @href="mailto:"
+          >
+            Meld het ons!
+          </AuLinkExternal>
+        </span>
+      </section>
+
+      <section class>
+        <p>Maturiteitsniveaus bestuursorganen</p>
+        <AuPill @icon="info-circle">Een maturiteitsniveau toont de mate van
+          volwassenheid van een leverancier in datakwaliteit en hergebruik.
+        </AuPill>
+
+        <div
+          class="au-u-flex au-u-1-1 au-u-flex--between au-u-flex--spaced au-u-padding-top au-u-padding-bottom"
+        >
+
+          <article
+            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
+          >
+            <p class="au-u-medium">Burgemeester</p>
+            <p class="au-u-h3 au-u-bold">N</p>
+          </article>
+
+          <article
+            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
+          >
+            <p class="au-u-medium">College van burgemeester en schepenen</p>
+            <p class="au-u-h3 au-u-bold">N</p>
+          </article>
+
+          <article
+            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
+          >
+            <p class="au-u-medium">Gemeenteraad</p>
+            <p class="au-u-h3 au-u-bold">N</p>
+          </article>
+        </div>
+      </section>
+
+      <section>
+        <AuHeading @level="5" @skin="5">Publicate Statistieken</AuHeading>
+        <div class="au-u-1-1 au-o-grid au-o-grid--tiny au-u-padding-top-small">
+
+          {{! Sessions }}
+          <article
+            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
+          >
+            <span class="au-u-flex au-u-flex--column">
+              <p class="au-u-medium">Aantal gepubliceerde zittingen</p>
+              <p
+                class="au-u-h2 au-u-bold"
+              >{{this.model.amountOfPublicSessions}}</p>
+            </span>
+            <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
+              <p class="au-u-medium">Eerste gepubliceerde zitting</p>
+              <p class="au-u-h4">
+                {{this.model.firstPublishedSessionDate}}
+              </p>
+            </span>
+            <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
+              <p class="au-u-medium">Laatste gepubliceerde zitting</p>
+              <p class="au-u-h4">
+                {{this.model.lastPublishedSessionDate}}
+              </p>
+            </span>
+          </article>
+
+          {{! Agenda items }}
+          <article
+            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
+          >
+            <span class="au-u-flex au-u-flex--column">
+              <p class="au-u-medium">Aantal gepubliceerde agendapunten</p>
+              <p
+                class="au-u-h2 au-u-bold"
+              >{{this.model.amountOfPublicAgendaItems}}
+              </p>
+            </span>
+            <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
+              <p class="au-u-medium">Aantal agendapunten met titels</p>
+              <p
+                class="au-u-h2 au-u-bold"
+              >{{this.model.amountOfPublicAgendaItemsWithTitle}}
+              </p>
+            </span>
+            <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
+              <p class="au-u-medium">Aantal agendapunten met beschrijving</p>
+              <p
+                class="au-u-h2 au-u-bold"
+              >{{this.model.amountOfPublicAgendaItemsWithDescription}}
+              </p>
+            </span>
+          </article>
+
+          {{! Decisions }}
+          <article
+            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
+          >
+            <span class="au-u-flex au-u-flex--column">
+              <p class="au-u-medium">Aantal gepubliceerde besluiten</p>
+              <p
+                class="au-u-h2 au-u-bold"
+              >{{this.model.amountOfPublicDecisions}}
+              </p>
+            </span>
+          </article>
+
+          {{! Votes }}
+          <article
+            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
+          >
+            <span class="au-u-flex au-u-flex--column">
+              <p class="au-u-medium">Aantal gepubliceerde stemmingen</p>
+              <p class="au-u-h2 au-u-bold">{{this.model.amountOfPublicVotes}}
+              </p>
+            </span>
+          </article>
+        </div>
+      </section>
+    </AuContent>
+
+  </div>
+  <FilterSidebar
+    @id="filtersidebar"
+    @class="c-interface__sidebar c-interface__sidebar--dialog {{if
+      this.hasFilter
+      'is-visible'
+    }}"
+  >
+    <div class="c-interface__sidebar-close-button">
+      <a
+        href="#filtercontent"
+        class="au-c-button au-c-button--naked"
+        {{on "click" this.hideFilter}}
+      >
+        Terug
+      </a>
+    </div>
+    <div class="c-interface__sidebar-main">
+      <h3 class="au-u-h4 au-u-medium">Filters</h3>
+      <Filters::SelectMultipleFilter
+        @selected={{this.governingBodyList.selectedGoverningBodyClassifications}}
+        @updateSelected={{this.updateSelectedGoverningBodyClassifications}}
+        @id="governing-body"
+        @label="Bestuursorgaan"
+        @noMatchesMessage="Geen bestuursorganen gevonden"
+        @options={{this.governingBodies}}
+        @searchField="label"
+        @queryParam="bestuursorganen"
+        @placeholder="Alle bestuursorganen"
+      />
+      <Filters::DateRangeFilter
+        @startQueryParam="begin"
+        @endQueryParam="eind"
+        @start={{this.plannedStartMin}}
+        @end={{this.plannedStartMax}}
+      />
+    </div>
+    <div class="c-interface__sidebar-submit-buttons">
+      <AuButton @skin="primary" @width="block" {{on "click" this.hideFilter}}>
+        Zoeken
+      </AuButton>
+
+      <a
+        href="#filtercontent"
+        class="au-c-button au-c-button--naked au-c-button--block"
+        {{on "click" this.hideFilter}}
+      >
+        Annuleer
+      </a>
+    </div>
+  </FilterSidebar>
+</div>
