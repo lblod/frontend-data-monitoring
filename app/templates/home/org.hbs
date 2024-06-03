@@ -2,7 +2,8 @@
   <AuHeading @level="1" @skin="2">Voorbeeld pagina organisatie rapport</AuHeading>
   <p>Applicatie in ontwikkeling</p>
   <p>Test: {{if this.loketSession.isMockLoginSession "Ja" "Nee"}}</p>
+  <p>Count:{{this.model.adminUnitCountReports.length}}</p>
   {{#each this.model.adminUnitCountReports as |report|}}
-    <p>{{report}}</p>
+    <p>UUID:{{report.uuid}}</p>
   {{/each}}
 </AuContent>
