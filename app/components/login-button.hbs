@@ -1,7 +1,17 @@
+{{#if (is-development)}}
 <AuLink
-  @route="auth.login"
-  @skin={{if @isCompact "primary" "button"}}
-  @icon="login"
+@route="mock-login"
+@skin={{if @isCompact "primary" "button"}}
+@icon="login"
 >
   Aanmelden
 </AuLink>
+{{else}}
+<AuLink
+@route="auth.login"
+@skin={{if @isCompact "primary" "button"}}
+@icon="login"
+>
+  Aanmelden
+</AuLink>
+{{/if}}

@@ -7,6 +7,7 @@ import LoketSessionService from 'frontend-data-monitoring/services/loket-session
 import Store from '@ember-data/store';
 import AccountModel from 'frontend-data-monitoring/models/account';
 
+// eslint-disable-next-line ember/use-ember-data-rfc-395-imports
 import { DS } from 'ember-data';
 
 export default class MockLoginController extends Controller {

@@ -6,6 +6,15 @@
   justify-content: end;
 }
 
+.au-o-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.au-o-grid--tiny {
+  gap: $au-unit-small;
+}
+
 .truncate {
   display: -webkit-box;
   -webkit-line-clamp: 3;
