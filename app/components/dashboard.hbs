@@ -1,0 +1,15 @@
+<AuContent>
+  <h1>Dashboard</h1>
+</AuContent>
+{{#if this.agendas}}
+  {{#each this.agendas as |item|}}
+    <div class="card">
+      <div class="card-body">
+        <h5 class="card-title">{{item.title}}</h5>
+        <p class="card-text">{{item.body}}</p>
+      </div>
+    </div>
+  {{/each}}
+{{else}}
+  <p>No data</p>
+{{/if}}
