@@ -12,7 +12,7 @@ pipeline:
     commands:
       - npm run lint:hbs
   lint:css:
-    image: danlynn/ember-cli:4.12.1-node_20.2
+    image: danlynn/ember-cli:4.2.0-node_16.14
     commands:
       - npm run lint:css
   test:
