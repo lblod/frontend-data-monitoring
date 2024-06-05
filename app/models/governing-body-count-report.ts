@@ -1,7 +1,7 @@
 import Model, { AsyncBelongsTo, AsyncHasMany, attr, belongsTo, hasMany } from '@ember-data/model';
 import AdministrativeUnitModel from './administrative-unit';
 import GoverningBodyModel from './governing-body';
-import CountModel from './publication-count-report';
+import PublicationCountReportModel from './publication-count-report';
 
 export default class GoverningBodyCountReportModel extends Model {
   @attr('string') declare uuid: string;
@@ -13,8 +13,8 @@ export default class GoverningBodyCountReportModel extends Model {
   declare adminUnit: AsyncBelongsTo<AdministrativeUnitModel>;
   @belongsTo('governing-body', { inverse: null, async: true })
   declare governingBody: AsyncBelongsTo<GoverningBodyModel>;
-  @hasMany('count', { inverse: null, async: true,})
-  declare counts: AsyncHasMany<CountModel>;
+  @hasMany('publication-count-report', { inverse: null, async: true,})
+  declare publicationCountReport: AsyncHasMany<PublicationCountReportModel>;
 }
 
 declare module 'ember-data/types/registries/model' {

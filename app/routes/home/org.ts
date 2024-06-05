@@ -13,7 +13,7 @@ export default class OrgReportRoute extends Route {
   async model(params: object, transition: Transition<unknown>): Promise<object> {
     const logginInAdminUnitId = this.currentSession.group.id;
     const adminUnitCountReports = await this.store.query('admin-unit-count-report',{
-      include: 'governing-body-count-report,governing-body-count-report.count',
+      include: 'governing-body-count-report,governing-body-count-report.publication-count-report',
       filter: {
         'administrative-unit': {
           ':id:': logginInAdminUnitId,
@@ -25,28 +25,25 @@ export default class OrgReportRoute extends Route {
     let amountOfPublicAgendaItems = 0;
     let amountOfPublicDecisions= 0;
     let amountOfPublicVotes = 0;
-    console.log('acms',adminUnitCountReports.toArray());
     for (const acm of adminUnitCountReports.toArray()) {
-      const countReports = await acm.governingBodyCountReports;
-      console.log('AdminUnitCountReport',acm, countReports.toArray());
-      for (const gcm of countReports.toArray()) {
-        const counts = await gcm.counts;
-        console.log('Govbodycountreport',gcm,counts.toArray());
-        amountOfPublicSessions += counts.find((cm)=>cm.targetClass===URI_MAP.SESSION)?.count ?? 0;
-        amountOfPublicAgendaItems += counts.find((cm)=>cm.targetClass===URI_MAP.AGENDA_ITEM)?.count ?? 0;
-        amountOfPublicDecisions += counts.find((cm)=>cm.targetClass===URI_MAP.DECISION)?.count ?? 0;
-        amountOfPublicVotes += counts.find((cm)=>cm.targetClass===URI_MAP.VOTE)?.count ?? 0;
+      const goveringBodyCountReports = await acm.governingBodyCountReport;
+      for (const gcm of goveringBodyCountReports.toArray()) {
+        const publicationCountReports = await gcm.publicationCountReport;
+        amountOfPublicSessions += publicationCountReports.find((cm)=>cm.targetClass===URI_MAP.SESSION)?.count ?? 0;
+        amountOfPublicAgendaItems += publicationCountReports.find((cm)=>cm.targetClass===URI_MAP.AGENDA_ITEM)?.count ?? 0;
+        amountOfPublicDecisions += publicationCountReports.find((cm)=>cm.targetClass===URI_MAP.DECISION)?.count ?? 0;
+        amountOfPublicVotes += publicationCountReports.find((cm)=>cm.targetClass===URI_MAP.VOTE)?.count ?? 0;
       }
     }
 
     return {
-      lastHarvestingDate:new Date('2024-06-03T12:00+02:00'),
-      amountOfPublicSessions,
-      firstPublishedSessionDate: 0,
-      lastPublishedSessionDate: 0,
+      lastHarvestingDate:null,
+      firstPublishedSessionDate: NaN,
+      lastPublishedSessionDate: NaN,
+      amountOfPublicAgendaItemsWithTitle: NaN,
+      amountOfPublicAgendaItemsWithDescription: NaN,
       amountOfPublicAgendaItems,
-      amountOfPublicAgendaItemsWithTitle: 0,
-      amountOfPublicAgendaItemsWithDescription: 0,
+      amountOfPublicSessions,
       amountOfPublicDecisions,
       amountOfPublicVotes,
     }

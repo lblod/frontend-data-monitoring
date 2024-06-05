@@ -10,7 +10,7 @@ export default class AdminUnitCountReportModel extends Model {
   @belongsTo('administrative-unit', { inverse: null, async: true })
   declare adminUnit: AsyncBelongsTo<AdministrativeUnitModel>;
   @hasMany('governing-body-count-report', { inverse: null, async: true,})
-  declare governingBodyCountReports: AsyncHasMany<GoverningBodyCountReportModel>;
+  declare governingBodyCountReport: AsyncHasMany<GoverningBodyCountReportModel>;
 }
 
 declare module 'ember-data/types/registries/model' {

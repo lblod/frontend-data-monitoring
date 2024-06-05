@@ -3,7 +3,7 @@ import Model, { AsyncBelongsTo, AsyncHasMany, attr, belongsTo, hasMany } from '@
 export default class PublicationCountReportModel extends Model {
   @attr('string') declare prefLabel: string;
   @attr('string') declare targetClass: string;
-  @attr('string') declare count: number;
+  @attr('number') declare count: number;
 }
 
 declare module 'ember-data/types/registries/model' {
