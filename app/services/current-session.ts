@@ -15,7 +15,7 @@ export enum Role {
 }
 
 const ROLE_MAPPING: Record<string, Role> = {
-  'LoketLB-ContactOrganisatiegegevensGebruiker': Role.OrgUser, // Needs to be changed. Mistake in mock login generation in dispatch
+  'DM-AdminUnitAdministratorRole': Role.OrgUser, // Needs to be changed. Mistake in mock login generation in dispatch
   'DM-LeveranciersGebruiker': Role.SupplierUser,
   'DM-AbbGebruiker': Role.AbbUser,
 } as const;
@@ -48,6 +48,7 @@ export default class CurrentSessionService extends Service {
       const roles = this.session.data.authenticated.data.attributes.roles as
         | string[]
         | undefined;
+      console.log(roles);
       this.roles = roles ? roles.map(convertRole) : [Role.Public];
 
       const groupId =

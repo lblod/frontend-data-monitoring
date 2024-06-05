@@ -24,7 +24,7 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
-    "dev": "ember serve --environment=development --proxy=https://dm.dennisve-dev-2.s.redhost.be/ --secure-proxy=false",
+    "dev": "ember serve --environment=development --proxy=https://dm.dennisve-dev-2.s.redhost.be/ --secure-proxy=false --port=4201",
     "dev:proxy": "ember serve --environment=development --proxy=https://dev.lokaalbeslist.lblod.info/",
     "qa:proxy": "ember serve --environment=development --proxy=https://lokaalbeslist.lblod.info/",
     "start": "ember serve --environment=development",
