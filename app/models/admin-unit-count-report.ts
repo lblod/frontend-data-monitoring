@@ -1,19 +1,16 @@
 import Model, { AsyncBelongsTo, AsyncHasMany, attr, belongsTo, hasMany } from '@ember-data/model';
 import AdministrativeUnitModel from './administrative-unit';
-import GoverningBodyModel from './governing-body';
-import CountModel from './count';
+import GoverningBodyCountReportModel from './governing-body-count-report';
 
 export default class AdminUnitCountReportModel extends Model {
   @attr('string') declare uuid: string;
   @attr('date') declare createdAt: Date;
   @attr('date') declare day: Date;
-  @attr('date') declare prefLabel: string;
-  @belongsTo('admin-unit', { inverse: null, async: true })
+  @attr('string') declare prefLabel: string;
+  @belongsTo('administrative-unit', { inverse: null, async: true })
   declare adminUnit: AsyncBelongsTo<AdministrativeUnitModel>;
-  @belongsTo('govering-body', { inverse: null, async: true })
-  declare goveringBody: AsyncBelongsTo<GoverningBodyModel>;
-  @hasMany('count', { inverse: null, async: true,})
-  declare counts: AsyncHasMany<CountModel>;
+  @hasMany('governing-body-count-report', { inverse: null, async: true,})
+  declare governingBodyCountReports: AsyncHasMany<GoverningBodyCountReportModel>;
 }
 
 declare module 'ember-data/types/registries/model' {
