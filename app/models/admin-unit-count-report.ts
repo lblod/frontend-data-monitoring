@@ -1,4 +1,10 @@
-import Model, { AsyncBelongsTo, AsyncHasMany, attr, belongsTo, hasMany } from '@ember-data/model';
+import Model, {
+  AsyncBelongsTo,
+  AsyncHasMany,
+  attr,
+  belongsTo,
+  hasMany,
+} from '@ember-data/model';
 import AdministrativeUnitModel from './administrative-unit';
 import GoverningBodyCountReportModel from './governing-body-count-report';
 
@@ -9,7 +15,7 @@ export default class AdminUnitCountReportModel extends Model {
   @attr('string') declare prefLabel: string;
   @belongsTo('administrative-unit', { inverse: null, async: true })
   declare adminUnit: AsyncBelongsTo<AdministrativeUnitModel>;
-  @hasMany('governing-body-count-report', { inverse: null, async: true,})
+  @hasMany('governing-body-count-report', { inverse: null, async: true })
   declare governingBodyCountReport: AsyncHasMany<GoverningBodyCountReportModel>;
 }
 

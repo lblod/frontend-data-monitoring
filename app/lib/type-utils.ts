@@ -12,8 +12,8 @@ export type Resolved<P> = P extends Promise<infer T> ? T : P;
 export type ModelFrom<R extends Route> = Resolved<ReturnType<R['model']>>;
 
 export const URI_MAP = {
-'SESSION':`http://data.vlaanderen.be/ns/besluit#Zitting`,
-'AGENDA_ITEM':`http://data.vlaanderen.be/ns/besluit#Agendapunt`,
-'DECISION':`http://data.vlaanderen.be/ns/besluit#Besluit`,
-'VOTE':`http://data.vlaanderen.be/ns/besluit#Stemming`,
+  SESSION: `http://data.vlaanderen.be/ns/besluit#Zitting`,
+  AGENDA_ITEM: `http://data.vlaanderen.be/ns/besluit#Agendapunt`,
+  DECISION: `http://data.vlaanderen.be/ns/besluit#Besluit`,
+  VOTE: `http://data.vlaanderen.be/ns/besluit#Stemming`,
 } as const;

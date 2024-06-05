@@ -7,7 +7,7 @@ import Store from '@ember-data/store';
 // Mixins are no longer in fashion. And the plugin was not compatible with this one.
 
 export default class JSONAPIWithMetaSerializer extends JSONAPISerializer {
-  serializeAttribute(snapshot: any, json:any, key:string, attributes:any) {
+  serializeAttribute(snapshot: any, json: any, key: string, attributes: any) {
     if (key !== 'uri')
       super.serializeAttribute(snapshot, json, key, attributes);
   }
