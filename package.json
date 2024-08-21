@@ -24,7 +24,7 @@
     "lint:hbs:fix": "ember-template-lint . --fix",
     "lint:js": "eslint . --cache",
     "lint:js:fix": "eslint . --fix",
-    "dev": "ember serve --environment=development --proxy=https://dm.dennisve-dev-2.s.redhost.be/ --secure-proxy=false --port=4201",
+    "dev": "ember serve --environment=development --proxy=https://data-monitoring.andres-dev.s.redhost.be/ --secure-proxy=false --port=4202",
     "dev:proxy": "ember serve --environment=development --proxy=https://dev.lokaalbeslist.lblod.info/",
     "qa:proxy": "ember serve --environment=development --proxy=https://lokaalbeslist.lblod.info/",
     "start": "ember serve --environment=development",
@@ -132,7 +132,8 @@
     "tracked-toolbox": "^2.0.0",
     "typescript": "^5.0.4",
     "webpack": "^5.78.0",
-    "webpack-bundle-analyzer": "^4.9.0"
+    "webpack-bundle-analyzer": "^4.9.0",
+    "@lblod/ember-mock-login": "^0.10.0"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"

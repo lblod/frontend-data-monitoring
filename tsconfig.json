@@ -16,6 +16,7 @@
     "tests/**/*",
     "types/**/*",
     "app/config/environment.d.ts",
-    "app/config/ember-simple-auth.d.ts"
+    "app/config/ember-simple-auth.d.ts",
+    "app/models/.ts"
   ]
 }

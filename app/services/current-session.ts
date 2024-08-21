@@ -36,7 +36,6 @@ export default class CurrentSessionService extends Service {
   @tracked roles: Role[] = [];
 
   async load() {
-    console.log('load', { auth: this.session.isAuthenticated });
     if (this.session.isAuthenticated) {
       const accountId =
         this.session.data.authenticated.relationships.account.data.id;
@@ -48,7 +47,6 @@ export default class CurrentSessionService extends Service {
       const roles = this.session.data.authenticated.data.attributes.roles as
         | string[]
         | undefined;
-      console.log(roles);
       this.roles = roles ? roles.map(convertRole) : [Role.Public];
 
       const groupId =

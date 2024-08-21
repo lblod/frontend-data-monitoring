@@ -11,7 +11,6 @@ export default class HomeRoute extends Route {
   @service declare currentSession: CurrentSessionService;
 
   async beforeModel(transition: Transition) {
-    console.log('Setting up session in Homeroute');
     await this.session.setup();
     await this.currentSession.load();
     this.session.requireAuthentication(transition, 'auth.login');

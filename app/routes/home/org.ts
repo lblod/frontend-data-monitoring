@@ -2,17 +2,38 @@ import Route from '@ember/routing/route';
 import Store from '@ember-data/store';
 
 import { inject as service } from '@ember/service';
-import Transition from '@ember/routing/transition';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
+import { task } from 'ember-concurrency';
 import { URI_MAP } from 'frontend-data-monitoring/lib/type-utils';
 
 export default class OrgReportRoute extends Route {
   @service declare store: Store;
   @service declare currentSession: CurrentSessionService;
-  async model(
-    params: object,
-    transition: Transition<unknown>
-  ): Promise<object> {
+  async model(): Promise<object> {
+    return {
+      lastHarvestingDate: this.getLastHarvestingDate.perform(),
+      data: this.getData.perform(),
+    };
+  }
+
+  getLastHarvestingDate = task({ drop: true }, async () => {
+    const logginInAdminUnitId = this.currentSession.group.id;
+    const lastHarvestingExecutionRecord = await this.store.query(
+      'last-harvesting-execution-record',
+      {
+        filter: {
+          'administrative-unit': {
+            ':id:': logginInAdminUnitId,
+          },
+        },
+        limit: 1,
+      }
+    );
+    const lastHarvestingDate = lastHarvestingExecutionRecord.slice()[0];
+    return lastHarvestingDate?.lastExecutionTime;
+  });
+
+  getData = task({ drop: true }, async () => {
     const logginInAdminUnitId = this.currentSession.group.id;
     const adminUnitCountReports = await this.store.query(
       'admin-unit-count-report',
@@ -31,9 +52,10 @@ export default class OrgReportRoute extends Route {
     let amountOfPublicAgendaItems = 0;
     let amountOfPublicDecisions = 0;
     let amountOfPublicVotes = 0;
-    for (const acm of adminUnitCountReports.toArray()) {
-      const goveringBodyCountReports = await acm.governingBodyCountReport;
-      for (const gcm of goveringBodyCountReports.toArray()) {
+
+    for (const acm of adminUnitCountReports.slice()) {
+      const governingBodyCountReports = await acm.governingBodyCountReport;
+      for (const gcm of governingBodyCountReports.slice()) {
         const publicationCountReports = await gcm.publicationCountReport;
         amountOfPublicSessions +=
           publicationCountReports.find(
@@ -52,9 +74,7 @@ export default class OrgReportRoute extends Route {
             ?.count ?? 0;
       }
     }
-
     return {
-      lastHarvestingDate: null,
       firstPublishedSessionDate: NaN,
       lastPublishedSessionDate: NaN,
       amountOfPublicAgendaItemsWithTitle: NaN,
@@ -64,5 +84,5 @@ export default class OrgReportRoute extends Route {
       amountOfPublicDecisions,
       amountOfPublicVotes,
     };
-  }
+  });
 }
