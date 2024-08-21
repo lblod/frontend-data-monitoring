@@ -10,6 +10,7 @@ export default class AuthSwitchRoute extends Route {
   @service declare loketSession: LoketSessionService;
 
   async beforeModel(transition: Transition<unknown>) {
+    await this.loketSession.setup();
     this.loketSession.requireAuthentication(transition, 'login');
     try {
       const wasMockLoginSession = this.loketSession.isMockLoginSession;
@@ -21,7 +22,8 @@ export default class AuthSwitchRoute extends Route {
       window.location.replace(logoutUrl);
     } catch (error) {
       throw new Error(
-        `Something went wrong while trying to remove the loketSession on the server\n${error}`
+        'Something went wrong while trying to remove the session on the server:' +
+          error
       );
     }
   }

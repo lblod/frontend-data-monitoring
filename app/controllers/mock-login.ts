@@ -24,8 +24,7 @@ export default class MockLoginController extends Controller {
     | DS.AdapterPopulatedRecordArray<AccountModel>
     | undefined;
 
-  queryStore = task(async () => {
-    // This code needs a refactor. Copied code from contactgegevens not correct
+  queryStore = task({ drop: true }, async () => {
     const filter: Record<string, string | object> = {
       provider: 'https://github.com/lblod/mock-login-service',
     };
@@ -41,6 +40,13 @@ export default class MockLoginController extends Controller {
       sort: 'user.first-name',
     });
     return accounts;
+  });
+
+  callLogin = task({ drop: true }, async (loginFunction, account) => {
+    const user = await account.user;
+    const group = (await user.groups)[0];
+    const groupId = (await group).id;
+    loginFunction(account.id, groupId);
   });
 
   updateSearch = task({ restartable: true }, async (value) => {

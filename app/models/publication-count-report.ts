@@ -1,10 +1,4 @@
-import Model, {
-  AsyncBelongsTo,
-  AsyncHasMany,
-  attr,
-  belongsTo,
-  hasMany,
-} from '@ember-data/model';
+import Model, { attr } from '@ember-data/model';
 
 export default class PublicationCountReportModel extends Model {
   @attr('string') declare prefLabel: string;

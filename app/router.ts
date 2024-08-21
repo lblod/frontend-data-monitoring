@@ -22,11 +22,17 @@ Router.map(function () {
   });
   this.route('mock-login');
 
-  this.route('disclaimer');
   this.route('help');
-  this.route('cookie-notice', { path: '/cookieverklaring' });
-  this.route('accessibility-statement', {
-    path: '/toegankelijkheidsverklaring',
+  this.route('legal', { path: '/legaal' }, function () {
+    this.route('accessibilitystatement', {
+      path: '/toegangkelijkheidsverklaring',
+    });
+    this.route('cookiestatement', {
+      path: '/cookieverklaring',
+    });
+    this.route('disclaimer');
   });
-  this.route('four-oh-four', { path: '/*path' });
+  this.route('404', {
+    path: '/*wildcard',
+  });
 });

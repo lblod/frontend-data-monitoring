@@ -1,42 +1,50 @@
 {{page-title "Mock login"}}
 
-<div class="au-o-region-large">
-  <div class="au-o-layout">
-    <AuContent class="au-u-3-4@medium">
-      <AuHeading>Mock login</AuHeading>
-      <MockLogin as |loginComponent|>
-        {{#if loginComponent.isLoading}}
-          <AuLoader />
-        {{else}}
-          {{#if loginComponent.errorMessage}}
-            <p>{{loginComponent.errorMessage}}</p>
-          {{/if}}
-          <AuHeading @skin="4">Kies een bestuurseenheid om mee in te loggen.</AuHeading>
-          <p class="au-u-margin-top-small au-u-margin-bottom">
-            {{#let (uuid) as |id|}}
-              <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
-              <input
-                class="au-c-input au-c-input--block js-js-input-pattern-bound"
-                id={{(uuid)}}
-                placeholder="Aalst, Berchem, ..."
-                value={{this.gemeente}}
-                oninput={{perform this.updateSearch value="target.value"}}
-              />
-            {{/let}}
-          </p>
-          {{#each this.model as |account|}}
-            <div
-              class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-tiny"
-            >
-              <AuButton
-                @skin="link"
-                {{on "click" (fn loginComponent.login account)}}
-              >
-                <strong>{{account.user.fullName}}</strong>
-              </AuButton>
-            </div>
-          {{/each}}
+<StaticPage
+  class="au-c-body-container au-c-body-container--scroll au-u-flex--between"
+>
+  <div class="au-o-layout au-o-region-large au-u-1-1">
+    <MockLogin as |login|>
+      {{#if login.isLoading}}
+        <AuLoader class="au-u-margin-huge">Bestuurseenheden aan het laden</AuLoader>
+      {{else}}
+        {{#if login.errorMessage}}
+          {{login.errorMessage}}
         {{/if}}
+        <AuHeading @skin="4">Kies een bestuurseenheid om mee in te loggen.</AuHeading>
+        <p class="au-u-margin-top-small au-u-margin-bottom">
+          {{#let (uuid) as |id|}}
+            <AuLabel for={{id}}>Bestuurseenheid zoeken</AuLabel>
+            <input
+              class="au-c-input au-c-input--block js-js-input-pattern-bound"
+              id={{(uuid)}}
+              placeholder="Aalst, Berchem, ..."
+              value={{this.gemeente}}
+              oninput={{perform this.updateSearch value="target.value"}}
+            />
+          {{/let}}
+        </p>
+        <ul>
+          {{#each this.model as |account|}}
+            <li>
+              <div
+                class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-small"
+              >
+                <AuButton
+                  @skin="link"
+                  {{on "click" (perform this.callLogin login.login account)}}
+                >
+                  <strong>
+                    {{account.user.firstName}}
+                    {{account.user.familyName}}
+                  </strong>
+                </AuButton>
+              </div>
+            </li>
+          {{/each}}
+        </ul>
+      {{/if}}
+      <div class="au-u-padding-bottom">
         <AuDataTableNumberPagination
           @page={{this.page}}
           @size={{this.size}}
@@ -44,7 +52,7 @@
           @total={{this.model.meta.count}}
           @links={{this.model.meta.pagination}}
         />
-      </MockLogin>
-    </AuContent>
+      </div>
+    </MockLogin>
   </div>
-</div>
+</StaticPage>
