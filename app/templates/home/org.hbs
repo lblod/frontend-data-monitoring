@@ -5,6 +5,7 @@
   >
 
     <AuContent class="au-o-flow au-o-flow--small au-u-padding">
+
       <section class="au-u-flex au-u-flex--between">
         <AuHeading
           @level="1"
@@ -19,8 +20,18 @@
             overheden gepubliceerde datasets.
           </p>
         </span>
-        <AuPill @icon="renew">Laatste harvesting op
-          {{this.model.lastHarvestingDate}}</AuPill>
+        <AuPill @skin="default" @icon="clock-rewind">Laatste harvesting
+          {{#if this.lastHarvestingDateIsLoading}}
+            aan het laden..
+          {{else}}
+            {{#if (date-format this.lastHarvestingDate)}}
+              op
+              {{date-format this.lastHarvestingDate}}
+            {{else}}
+              is niet opgegeven.
+            {{/if}}
+          {{/if}}
+        </AuPill>
       </section>
       <section class="au-u-text-right">
         <span
@@ -81,20 +92,32 @@
           >
             <span class="au-u-flex au-u-flex--column">
               <p class="au-u-medium">Aantal gepubliceerde zittingen</p>
-              <p
-                class="au-u-h2 au-u-bold"
-              >{{this.model.amountOfPublicSessions}}</p>
+              <p class="au-u-h2 au-u-bold">
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{this.data.amountOfPublicSessions}}
+                {{/if}}
+              </p>
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Eerste gepubliceerde zitting</p>
               <p class="au-u-h4">
-                {{this.model.firstPublishedSessionDate}}
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{this.data.firstPublishedSessionDate}}
+                {{/if}}
               </p>
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Laatste gepubliceerde zitting</p>
               <p class="au-u-h4">
-                {{this.model.lastPublishedSessionDate}}
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{this.data.lastPublishedSessionDate}}
+                {{/if}}
               </p>
             </span>
           </article>
@@ -105,23 +128,32 @@
           >
             <span class="au-u-flex au-u-flex--column">
               <p class="au-u-medium">Aantal gepubliceerde agendapunten</p>
-              <p
-                class="au-u-h2 au-u-bold"
-              >{{this.model.amountOfPublicAgendaItems}}
+              <p class="au-u-h2 au-u-bold">
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{this.data.amountOfPublicAgendaItems}}
+                {{/if}}
               </p>
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Aantal agendapunten met titels</p>
-              <p
-                class="au-u-h2 au-u-bold"
-              >{{this.model.amountOfPublicAgendaItemsWithTitle}}
+              <p class="au-u-h2 au-u-bold">
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{this.data.amountOfPublicAgendaItemsWithTitle}}
+                {{/if}}
               </p>
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Aantal agendapunten met beschrijving</p>
-              <p
-                class="au-u-h2 au-u-bold"
-              >{{this.model.amountOfPublicAgendaItemsWithDescription}}
+              <p class="au-u-h2 au-u-bold">
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{this.data.amountOfPublicAgendaItemsWithDescription}}
+                {{/if}}
               </p>
             </span>
           </article>
@@ -132,9 +164,12 @@
           >
             <span class="au-u-flex au-u-flex--column">
               <p class="au-u-medium">Aantal gepubliceerde besluiten</p>
-              <p
-                class="au-u-h2 au-u-bold"
-              >{{this.model.amountOfPublicDecisions}}
+              <p class="au-u-h2 au-u-bold">
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{this.data.amountOfPublicDecisions}}
+                {{/if}}
               </p>
             </span>
           </article>
@@ -145,12 +180,18 @@
           >
             <span class="au-u-flex au-u-flex--column">
               <p class="au-u-medium">Aantal gepubliceerde stemmingen</p>
-              <p class="au-u-h2 au-u-bold">{{this.model.amountOfPublicVotes}}
+              <p class="au-u-h2 au-u-bold">
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{this.data.amountOfPublicVotes}}
+                {{/if}}
               </p>
             </span>
           </article>
         </div>
       </section>
+
     </AuContent>
 
   </div>
