@@ -27,6 +27,7 @@ export default class OrgReportRoute extends Route {
           },
         },
         limit: 1,
+        sort: '-last-execution-time',
       }
     );
     const lastHarvestingDate = lastHarvestingExecutionRecord.slice()[0];
@@ -69,6 +70,10 @@ export default class OrgReportRoute extends Route {
           publicationCountReports.find(
             (cm) => cm.targetClass === URI_MAP.DECISION
           )?.count ?? 0;
+        console.log(
+          publicationCountReports.find((cm) => cm.targetClass === URI_MAP.VOTE)
+            ?.count
+        );
         amountOfPublicVotes +=
           publicationCountReports.find((cm) => cm.targetClass === URI_MAP.VOTE)
             ?.count ?? 0;
