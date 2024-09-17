@@ -4,7 +4,8 @@ import RouterService from '@ember/routing/router-service';
 import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 import { inject as service } from '@ember/service';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
-import ENV from 'frontend-data-monitoring/config/environment';
+
+import { task } from 'ember-concurrency';
 
 type MockLoginRouteParams = {
   gemeente: string;
@@ -32,10 +33,13 @@ export default class MockLoginRoute extends Route<
   }
 
   async model(params: MockLoginRouteParams) {
+    return { accounts: this.loadAccounts.perform(params) };
+  }
+
+  loadAccounts = task({ keepLatest: true }, async (params) => {
     const filter: Record<string, string | object> = {
       provider: 'https://github.com/lblod/mock-login-service',
     };
-
     if (params.gemeente) filter['user'] = { groups: params.gemeente };
     try {
       const accounts = await this.store.query('account', {
@@ -48,5 +52,5 @@ export default class MockLoginRoute extends Route<
     } catch (error) {
       throw new Error('Something went wrong while fetching accounts:' + error);
     }
-  }
+  });
 }
