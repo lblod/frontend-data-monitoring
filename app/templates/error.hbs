@@ -1,4 +1,12 @@
-{{page-title "Er is iets fout gelopen!"}}
+{{page-title "Error"}}
 
-<Oops @title="Oeps!" @content="Er is iets fout gelopen!" />
-{{outlet}}
+<AuMainContainer as |m|>
+  <m.content @scroll={{true}} class="au-u-flex au-u-flex--center">
+    <PageNotFound
+      @title="Oeps"
+      @content="Er is iets fout gelopen!"
+      @image="/assets/images/page-not-found.svg"
+    />
+  </m.content>
+</AuMainContainer>
+<Footer />

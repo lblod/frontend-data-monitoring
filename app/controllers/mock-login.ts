@@ -20,9 +20,21 @@ export default class MockLoginController extends Controller {
   @tracked gemeente = '';
   @tracked page = 0;
 
-  @tracked declare model:
-    | DS.AdapterPopulatedRecordArray<AccountModel>
-    | undefined;
+  @tracked declare model: {
+    accounts: {
+      isRunning: boolean;
+      isFinished: boolean;
+      value: DS.AdapterPopulatedRecordArray<AccountModel>;
+    };
+  };
+
+  get isLoading() {
+    return this.model.accounts.isRunning;
+  }
+
+  get accounts() {
+    return this.model.accounts.isFinished ? this.model.accounts.value : [];
+  }
 
   queryStore = task({ drop: true }, async () => {
     const filter: Record<string, string | object> = {
@@ -51,6 +63,6 @@ export default class MockLoginController extends Controller {
     await timeout(500); // Debounce
     this.page = 0;
     this.gemeente = value;
-    this.model = await this.queryStore.perform();
+    this.model.accounts.value = await this.queryStore.perform();
   });
 }

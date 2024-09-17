@@ -25,34 +25,40 @@
           {{/let}}
         </p>
         <ul>
-          {{#each this.model as |account|}}
-            <li>
-              <div
-                class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-small"
-              >
-                <AuButton
-                  @skin="link"
-                  {{on "click" (perform this.callLogin login.login account)}}
+          {{#if this.model.accounts.isRunning}}
+            <AuLoader />
+          {{else}}
+            {{#each this.model.accounts.value as |account|}}
+              <li>
+                <div
+                  class="au-o-box au-o-box--small au-c-card au-u-margin-bottom-small"
                 >
-                  <strong>
-                    {{account.user.firstName}}
-                    {{account.user.familyName}}
-                  </strong>
-                </AuButton>
-              </div>
-            </li>
-          {{/each}}
+                  <AuButton
+                    @skin="link"
+                    {{on "click" (perform this.callLogin login.login account)}}
+                  >
+                    <strong>
+                      {{account.user.firstName}}
+                      {{account.user.familyName}}
+                    </strong>
+                  </AuButton>
+                </div>
+              </li>
+            {{/each}}
+          {{/if}}
         </ul>
       {{/if}}
-      <div class="au-u-padding-bottom">
-        <AuDataTableNumberPagination
-          @page={{this.page}}
-          @size={{this.size}}
-          @nbOfItems={{this.model.length}}
-          @total={{this.model.meta.count}}
-          @links={{this.model.meta.pagination}}
-        />
-      </div>
+      {{#unless this.model.accounts.isRunning}}
+        <div class="au-u-padding-bottom">
+          <AuDataTableNumberPagination
+            @page={{this.page}}
+            @size={{this.size}}
+            @nbOfItems={{this.model.accounts.value.length}}
+            @total={{this.model.accounts.value.meta.count}}
+            @links={{this.model.accounts.value.meta.pagination}}
+          />
+        </div>
+      {{/unless}}
     </MockLogin>
   </div>
 </StaticPage>
