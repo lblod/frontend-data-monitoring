@@ -5,27 +5,44 @@ import { inject as service } from '@ember/service';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import { task } from 'ember-concurrency';
 import { URI_MAP } from 'frontend-data-monitoring/lib/type-utils';
+import AdminUnitCountReportModel from 'frontend-data-monitoring/models/admin-unit-count-report';
+import GoverningBodyCountReportModel from 'frontend-data-monitoring/models/governing-body-count-report';
+import ArrayProxy from '@ember/array/proxy';
+import PublicationCountReportModel from 'frontend-data-monitoring/models/publication-count-report';
+
+type CountResult = {
+  firstPublishedSessionDate: number;
+  lastPublishedSessionDate: number;
+  amountOfPublicSessions: number;
+  amountOfPublicAgendaItems: number;
+  amountOfPublicDecisions: number;
+  amountOfPublicVotes: number;
+  amountOfPublicAgendaItemsWithTitle: number;
+  amountOfPublicAgendaItemsWithDescription: number;
+};
 
 export default class OrgReportRoute extends Route {
   @service declare store: Store;
   @service declare currentSession: CurrentSessionService;
-  async model(): Promise<object> {
+  queryParams = {
+    begin: {
+      refreshModel: true,
+    },
+    eind: {
+      refreshModel: true,
+    },
+  };
+  async model(params: { begin: string; eind: string }): Promise<object> {
     return {
       lastHarvestingDate: this.getLastHarvestingDate.perform(),
-      data: this.getData.perform(),
+      data: this.getData.perform(params),
     };
   }
 
   getLastHarvestingDate = task({ drop: true }, async () => {
-    const logginInAdminUnitId = this.currentSession.group.id;
     const lastHarvestingExecutionRecord = await this.store.query(
       'last-harvesting-execution-record',
       {
-        filter: {
-          'administrative-unit': {
-            ':id:': logginInAdminUnitId,
-          },
-        },
         limit: 1,
         sort: '-last-execution-time',
       }
@@ -34,60 +51,63 @@ export default class OrgReportRoute extends Route {
     return lastHarvestingDate?.lastExecutionTime;
   });
 
-  getData = task({ drop: true }, async () => {
-    const logginInAdminUnitId = this.currentSession.group.id;
-    const adminUnitCountReports = await this.store.query(
-      'admin-unit-count-report',
-      {
-        include:
-          'governing-body-count-report,governing-body-count-report.publication-count-report',
-        filter: {
-          'administrative-unit': {
-            ':id:': logginInAdminUnitId,
-          },
-        },
-      }
-    );
+  getData = task({ drop: true }, async (params): Promise<CountResult> => {
+    const fromDate = params.begin
+      ? new Date(params.begin).toISOString().split('T')[0]
+      : new Date(0).toISOString().split('T')[0];
 
-    let amountOfPublicSessions = 0;
-    let amountOfPublicAgendaItems = 0;
-    let amountOfPublicDecisions = 0;
-    let amountOfPublicVotes = 0;
-
-    for (const acm of adminUnitCountReports.slice()) {
-      const governingBodyCountReports = await acm.governingBodyCountReport;
-      for (const gcm of governingBodyCountReports.slice()) {
-        const publicationCountReports = await gcm.publicationCountReport;
-        amountOfPublicSessions +=
-          publicationCountReports.find(
-            (cm) => cm.targetClass === URI_MAP.SESSION
-          )?.count ?? 0;
-        amountOfPublicAgendaItems +=
-          publicationCountReports.find(
-            (cm) => cm.targetClass === URI_MAP.AGENDA_ITEM
-          )?.count ?? 0;
-        amountOfPublicDecisions +=
-          publicationCountReports.find(
-            (cm) => cm.targetClass === URI_MAP.DECISION
-          )?.count ?? 0;
-        console.log(
-          publicationCountReports.find((cm) => cm.targetClass === URI_MAP.VOTE)
-            ?.count
-        );
-        amountOfPublicVotes +=
-          publicationCountReports.find((cm) => cm.targetClass === URI_MAP.VOTE)
-            ?.count ?? 0;
-      }
-    }
-    return {
+    const toDate = params.eind
+      ? new Date(params.eind).toISOString().split('T')[0]
+      : new Date().toISOString().split('T')[0];
+    const countResult = {
       firstPublishedSessionDate: NaN,
       lastPublishedSessionDate: NaN,
+      amountOfPublicSessions: 0,
+      amountOfPublicAgendaItems: 0,
+      amountOfPublicDecisions: 0,
+      amountOfPublicVotes: 0,
       amountOfPublicAgendaItemsWithTitle: NaN,
       amountOfPublicAgendaItemsWithDescription: NaN,
-      amountOfPublicAgendaItems,
-      amountOfPublicSessions,
-      amountOfPublicDecisions,
-      amountOfPublicVotes,
     };
+    try {
+      const adminUnitCountReports: ArrayProxy<AdminUnitCountReportModel> =
+        await this.store.query('admin-unit-count-report', {
+          include:
+            'governing-body-count-report,governing-body-count-report.publication-count-report',
+          sort: '-created-at',
+          filter: {
+            'governing-body-count-report': {
+              ':gte:day': fromDate,
+              ':lte:day': toDate,
+            },
+          },
+        });
+
+      if (adminUnitCountReports.length === 0) return countResult;
+      for (const adminUnitCountReport of adminUnitCountReports.slice()) {
+        const governingBodyCountReports: ArrayProxy<GoverningBodyCountReportModel> =
+          await adminUnitCountReport.governingBodyCountReport;
+
+        for (const governingBodyCountReport of governingBodyCountReports.slice()) {
+          const publicationCountReports: ArrayProxy<PublicationCountReportModel> =
+            await governingBodyCountReport.publicationCountReport;
+
+          const findCount = (targetClass: string): number =>
+            publicationCountReports.find(
+              (report) => report.targetClass === targetClass
+            )?.count ?? 0;
+
+          countResult.amountOfPublicSessions += findCount(URI_MAP.SESSION);
+          countResult.amountOfPublicAgendaItems += findCount(
+            URI_MAP.AGENDA_ITEM
+          );
+          countResult.amountOfPublicDecisions += findCount(URI_MAP.DECISION);
+          countResult.amountOfPublicVotes += findCount(URI_MAP.VOTE);
+        }
+      }
+      return countResult;
+    } catch (error) {
+      return countResult;
+    }
   });
 }

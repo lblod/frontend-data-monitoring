@@ -29,15 +29,13 @@ export default class MockLoginController extends Controller {
       provider: 'https://github.com/lblod/mock-login-service',
     };
     if (this.gemeente) {
-      filter['user'] = {
-        'family-name': this.gemeente,
-      };
+      filter['user'] = { groups: this.gemeente };
     }
     const accounts = await this.store.query('account', {
       include: 'user,user.groups',
       filter: filter,
-      page: { size: this.size, number: this.page },
-      sort: 'user.first-name',
+      page: { size: 10, number: this.page },
+      sort: 'user.family-name',
     });
     return accounts;
   });

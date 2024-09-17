@@ -26,6 +26,7 @@ interface Signature {
 }
 
 enum Preset {
+  All = 'Alles',
   Future = 'Toekomst',
   ThisWeek = 'Deze week',
   LastWeek = 'Vorige week',
@@ -44,12 +45,13 @@ export default class DateRangeFilterComponent extends Component<Signature> {
   @service declare router: RouterService;
   @tracked start: string | null;
   @tracked end: string | null;
-  @tracked selectedPreset: Preset | null = null;
+  @tracked selectedPreset: Preset | null = Preset.All;
   @tracked isChoosingPresets = true;
   @tracked endDateError?: string[];
   @tracked startDateError?: string[];
 
   presets = [
+    Preset.All,
     Preset.Future,
     Preset.ThisWeek,
     Preset.LastWeek,
@@ -63,6 +65,7 @@ export default class DateRangeFilterComponent extends Component<Signature> {
   get presetDateRanges() {
     const today = new Date();
     return {
+      [Preset.All]: [toIsoDateString(new Date(0)), toIsoDateString(today)],
       [Preset.Future]: [toIsoDateString(today), this.MAX],
       [Preset.ThisWeek]: [
         toIsoDateString(startOfWeek(today)),
