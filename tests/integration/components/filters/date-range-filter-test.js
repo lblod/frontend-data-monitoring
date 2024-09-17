@@ -17,7 +17,7 @@ module('Integration | Component | filters/date-range-filter', function (hooks) {
   test('it displays presets by default', async function (assert) {
     assert
       .dom(this.element)
-      .hasText('Selecteer een periode Alle periodes Eigen periode kiezen');
+      .hasText('Selecteer een periode Alles × Eigen periode kiezen');
   });
 
   test('it switches between presets and custom date range when click the toggle button', async function (assert) {
