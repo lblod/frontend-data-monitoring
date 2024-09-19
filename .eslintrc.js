@@ -11,11 +11,22 @@ module.exports = {
     'eslint:recommended',
     'plugin:ember/recommended',
     'plugin:prettier/recommended',
+    'plugin:import/recommended',
   ],
   env: {
     browser: true,
   },
-  rules: {},
+  rules: {
+    'no-unused-vars': [
+      'error',
+      { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
+    ],
+    'import/no-unused-modules': [0, { unusedExports: true }],
+    'import/no-unresolved': 0,
+    '@typescript-eslint/no-explicit-any': 0,
+    'import/no-named-as-default-member': 0,
+    'import/named': 0,
+  },
   overrides: [
     {
       // ts files

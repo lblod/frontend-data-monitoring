@@ -9,12 +9,6 @@ import AdministrativeUnitModel from 'frontend-data-monitoring/models/administrat
 import { Role } from 'frontend-data-monitoring/constants/roles';
 import roleConfig from 'frontend-data-monitoring/config/roles-config';
 
-const ROLE_MAPPING: Record<string, Role> = {
-  'DM-AdminUnitAdministratorRole': Role.OrgUser,
-  'DM-LeveranciersGebruiker': Role.SupplierUser,
-  'DM-AbbGebruiker': Role.AbbUser,
-} as const;
-
 function convertRole(roleString: string): Role {
   const roleDetails = roleConfig[roleString];
   return roleDetails ? Role[roleDetails.enum] : Role.Public;

@@ -15,11 +15,10 @@ export default class AuthLogoutRoute extends Route {
     if (this.loketSession.requireAuthentication(transition, 'auth.login')) {
       try {
         const logoutUrl = this.loketSession.isMockLoginSession
-          ? this.router.urlFor('mock-login')
+          ? this.router.urlFor('login')
           : ENV.acmidm.logoutUrl;
         await this.loketSession.invalidate();
-        // window.location.replace(logoutUrl);
-        this.router.transitionTo('mock-login');
+        window.location.replace(logoutUrl);
       } catch (error) {
         throw new Error(
           'Something went wrong while trying to remove the loketSession on the server'

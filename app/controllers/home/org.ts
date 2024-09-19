@@ -3,7 +3,6 @@ import Controller from '@ember/controller';
 import { action } from '@ember/object';
 import { inject as service } from '@ember/service';
 import { tracked } from '@glimmer/tracking';
-import { Role } from 'frontend-data-monitoring/constants/roles';
 import { CountResult } from 'frontend-data-monitoring/routes/home/org';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
