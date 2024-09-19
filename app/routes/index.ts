@@ -1,9 +1,8 @@
 import Route from '@ember/routing/route';
 import RouterService from '@ember/routing/router-service';
 import { service } from '@ember/service';
-import CurrentSessionService, {
-  Role,
-} from 'frontend-data-monitoring/services/current-session';
+import { Role } from 'frontend-data-monitoring/constants/roles';
+import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 
 export default class ApplicationRoute extends Route {

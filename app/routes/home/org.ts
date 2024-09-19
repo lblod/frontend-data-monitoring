@@ -10,7 +10,7 @@ import GoverningBodyCountReportModel from 'frontend-data-monitoring/models/gover
 import ArrayProxy from '@ember/array/proxy';
 import PublicationCountReportModel from 'frontend-data-monitoring/models/publication-count-report';
 
-type CountResult = {
+export type CountResult = {
   firstPublishedSessionDate: number;
   lastPublishedSessionDate: number;
   amountOfPublicSessions: number;
