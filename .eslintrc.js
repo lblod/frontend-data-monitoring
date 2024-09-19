@@ -25,7 +25,8 @@ module.exports = {
     'import/no-unresolved': 0,
     '@typescript-eslint/no-explicit-any': 0,
     'import/no-named-as-default-member': 0,
-    'import/named': 0
+    'import/named': 0,
+    'comma-dangle': ['error', 'never']
   },
   overrides: [
     {

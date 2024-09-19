@@ -10,7 +10,12 @@
     {{#if @isLoading}}
       <AuLoader />
     {{else if this.moreDataToLoad}}
-      <AuButton @icon="add" @skin="secondary" @width="block" {{on "click" this.loadMore}}>Laad meer</AuButton>
+      <AuButton
+        @icon="add"
+        @skin="secondary"
+        @width="block"
+        {{on "click" this.loadMore}}
+      >Laad meer</AuButton>
     {{/if}}
   </div>
 </div>

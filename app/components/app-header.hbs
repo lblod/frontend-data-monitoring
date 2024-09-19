@@ -11,7 +11,13 @@
   <li class="au-c-list-horizontal__item">
     {{#if this.session.isAuthenticated}}
       <AuDropdown
-        @title={{concat this.currentSession.fullName " - " this.currentSession.groupClassification.label " " this.currentSession.group.name }}
+        @title={{concat
+          this.currentSession.fullName
+          " - "
+          this.currentSession.groupClassification.label
+          " "
+          this.currentSession.group.name
+        }}
         @buttonLabel="Account settings"
         @alignment="right"
         role="menu"

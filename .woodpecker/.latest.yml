@@ -4,7 +4,7 @@ pipeline:
     settings:
       repo: ${CI_REPO}
       tags: latest
-    secrets: [ docker_username, docker_password ]
+    secrets: [docker_username, docker_password]
 when:
   branch: master
   event: push

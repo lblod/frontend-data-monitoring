@@ -113,15 +113,15 @@ Or in template files by using the `is-feature-enabled` helper:
 
 ### List of feature flags
 
-| Name                    | Description                                                      |
-| ----------------------- | ---------------------------------------------------------------- |
+| Name          | Description   |
+| ------------- | ------------- |
 | <nothing yet> | <nothing yet> |
 
 ### Environment variables
 
-| Name              | Description                                                     |
-| ----------------- | --------------------------------------------------------------- |
-| ? | ? |
+| Name | Description |
+| ---- | ----------- |
+| ?    | ?           |
 
 ### styles/ naming scheme
 

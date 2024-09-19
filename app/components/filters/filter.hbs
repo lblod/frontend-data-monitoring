@@ -1,8 +1,9 @@
-<AuFormRow
-  class={{@rowClass}}
->
+<AuFormRow class={{@rowClass}}>
   {{#if @label}}
-    <AuLabel for={{@id}} class="{{if (eq @labelHidden true) 'au-u-hidden-visually'}}">
+    <AuLabel
+      for={{@id}}
+      class="{{if (eq @labelHidden true) 'au-u-hidden-visually'}}"
+    >
       {{@label}}
     </AuLabel>
   {{/if}}
