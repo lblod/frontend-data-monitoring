@@ -33,12 +33,10 @@
     "test:ember": "ember test",
     "release": "release-it"
   },
-  "dependencies": {
+  "devDependencies": {
     "@glimmer/component": "^1.1.2",
     "@lblod/ember-acmidm-login": "^2.1.0",
-    "uuid": "^10.0.0"
-  },
-  "devDependencies": {
+    "uuid": "^10.0.0",
     "@appuniversum/ember-appuniversum": "^3.6.0",
     "@ember/optional-features": "^2.0.0",
     "@ember/string": "^3.0.1",
@@ -134,8 +132,8 @@
     "tracked-built-ins": "^3.1.1",
     "tracked-toolbox": "^2.0.0",
     "typescript": "^5.0.4",
-    "webpack": "^5.78.0",
-    "webpack-bundle-analyzer": "^4.9.0"
+    "webpack": "^5.94.0",
+    "webpack-bundle-analyzer": "^4.10.2"
   },
   "engines": {
     "node": "14.* || 16.* || >= 18"
