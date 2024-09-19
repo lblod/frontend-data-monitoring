@@ -32,7 +32,7 @@ export default class CurrentSessionService extends Service {
           this.session.data?.authenticated?.relationships?.account?.data?.id;
         if (accountId) {
           this.account = await this.store.findRecord('account', accountId, {
-            include: 'user',
+            include: 'user'
           });
         }
         this.user = await this.account.user;
@@ -49,7 +49,7 @@ export default class CurrentSessionService extends Service {
             'administrative-unit',
             groupId,
             {
-              include: 'classification',
+              include: 'classification'
             }
           );
         }

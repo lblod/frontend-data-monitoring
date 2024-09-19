@@ -3,7 +3,7 @@ import Model, {
   AsyncHasMany,
   attr,
   belongsTo,
-  hasMany,
+  hasMany
 } from '@ember-data/model';
 import AdministrativeUnitModel from './administrative-unit';
 import GoverningBodyCountReportModel from './governing-body-count-report';

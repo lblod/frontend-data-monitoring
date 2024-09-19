@@ -3,7 +3,7 @@ import Model, {
   AsyncHasMany,
   attr,
   belongsTo,
-  hasMany,
+  hasMany
 } from '@ember-data/model';
 import AdministrativeUnitModel from './administrative-unit';
 import GoverningBodyClasssificationCodeModel from './governing-body-classification-code';
@@ -29,7 +29,7 @@ export default class GoverningBodyModel extends Model {
 
   @belongsTo('administrative-unit', {
     async: true,
-    inverse: 'governingBodies',
+    inverse: 'governingBodies'
   })
   declare administrativeUnit: AsyncBelongsTo<AdministrativeUnitModel>;
 
@@ -42,7 +42,7 @@ export default class GoverningBodyModel extends Model {
 
   @belongsTo('governing-body-classification-code', {
     async: true,
-    inverse: null,
+    inverse: null
   })
   declare classification: AsyncBelongsTo<GoverningBodyClasssificationCodeModel>;
 
@@ -51,13 +51,13 @@ export default class GoverningBodyModel extends Model {
 
   @belongsTo('governing-body', {
     async: true,
-    inverse: 'hasTimeSpecializations',
+    inverse: 'hasTimeSpecializations'
   })
   declare isTimeSpecializationOf: AsyncBelongsTo<GoverningBodyModel>;
 
   @hasMany('governing-body', {
     async: true,
-    inverse: 'isTimeSpecializationOf',
+    inverse: 'isTimeSpecializationOf'
   })
   declare hasTimeSpecializations: AsyncHasMany<GoverningBodyModel>;
 

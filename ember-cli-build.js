@@ -8,8 +8,8 @@ const isProductionBuild = process.env.EMBER_ENV === 'production';
 module.exports = function (defaults) {
   let app = new EmberApp(defaults, {
     '@appuniversum/ember-appuniversum': {
-      disableWormholeElement: true,
-    },
+      disableWormholeElement: true
+    }
   });
 
   const { Webpack } = require('@embroider/webpack');
@@ -28,10 +28,10 @@ module.exports = function (defaults) {
     packagerOptions: {
       webpackConfig: {
         plugins: [
-          process.env.ANALYZE_BUNDLE ? new BundleAnalyzerPlugin() : null,
-        ].filter(Boolean),
-      },
-    },
+          process.env.ANALYZE_BUNDLE ? new BundleAnalyzerPlugin() : null
+        ].filter(Boolean)
+      }
+    }
   };
 
   if (isProductionBuild) {

@@ -22,7 +22,7 @@ function buildLoginUrl({
   authUrl,
   clientId,
   authRedirectUrl,
-  scope,
+  scope
 }: AcmidmParams) {
   const loginUrl = new URL(authUrl);
   const searchParams = loginUrl.searchParams;

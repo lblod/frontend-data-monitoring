@@ -4,28 +4,28 @@ module.exports = {
   root: true,
   parser: '@typescript-eslint/parser',
   parserOptions: {
-    ecmaVersion: 'latest',
+    ecmaVersion: 'latest'
   },
   plugins: ['ember', '@typescript-eslint'],
   extends: [
     'eslint:recommended',
     'plugin:ember/recommended',
     'plugin:prettier/recommended',
-    'plugin:import/recommended',
+    'plugin:import/recommended'
   ],
   env: {
-    browser: true,
+    browser: true
   },
   rules: {
     'no-unused-vars': [
       'error',
-      { vars: 'all', args: 'after-used', ignoreRestSiblings: false },
+      { vars: 'all', args: 'after-used', ignoreRestSiblings: false }
     ],
     'import/no-unused-modules': [0, { unusedExports: true }],
     'import/no-unresolved': 0,
     '@typescript-eslint/no-explicit-any': 0,
     'import/no-named-as-default-member': 0,
-    'import/named': 0,
+    'import/named': 0
   },
   overrides: [
     {
@@ -33,8 +33,8 @@ module.exports = {
       files: ['**/*.ts'],
       extends: [
         'plugin:@typescript-eslint/eslint-recommended',
-        'plugin:@typescript-eslint/recommended',
-      ],
+        'plugin:@typescript-eslint/recommended'
+      ]
     },
     {
       // node files
@@ -48,21 +48,21 @@ module.exports = {
         './blueprints/*/index.js',
         './config/**/*.js',
         './lib/*/index.js',
-        './server/**/*.js',
+        './server/**/*.js'
       ],
       parserOptions: {
-        sourceType: 'script',
+        sourceType: 'script'
       },
       env: {
         browser: false,
-        node: true,
+        node: true
       },
-      extends: ['plugin:n/recommended'],
+      extends: ['plugin:n/recommended']
     },
     {
       // test files
       files: ['tests/**/*-test.{js,ts}'],
-      extends: ['plugin:qunit/recommended'],
-    },
-  ],
+      extends: ['plugin:qunit/recommended']
+    }
+  ]
 };

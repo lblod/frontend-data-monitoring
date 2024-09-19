@@ -19,7 +19,7 @@ export default class FeaturesService extends Service {
     this.setup({
       ...configFeatures,
       ...cookieFeatures,
-      ...queryFeatures,
+      ...queryFeatures
     });
 
     // save query params in cookie

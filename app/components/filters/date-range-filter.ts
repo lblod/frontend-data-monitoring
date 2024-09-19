@@ -12,7 +12,7 @@ import {
   startOfMonth,
   startOfWeek as startOfWeekDateFns,
   startOfYear,
-  sub,
+  sub
 } from 'date-fns';
 type ISODateString = string;
 
@@ -33,7 +33,7 @@ enum Preset {
   ThisMonth = 'Deze maand',
   LastMonth = 'Vorige maand',
   ThisYear = 'Dit jaar',
-  LastYear = 'Vorig jaar',
+  LastYear = 'Vorig jaar'
 }
 
 export default class DateRangeFilterComponent extends Component<Signature> {
@@ -58,7 +58,7 @@ export default class DateRangeFilterComponent extends Component<Signature> {
     Preset.ThisMonth,
     Preset.LastMonth,
     Preset.ThisYear,
-    Preset.LastYear,
+    Preset.LastYear
   ];
 
   @cached
@@ -69,28 +69,28 @@ export default class DateRangeFilterComponent extends Component<Signature> {
       [Preset.Future]: [toIsoDateString(today), this.MAX],
       [Preset.ThisWeek]: [
         toIsoDateString(startOfWeek(today)),
-        toIsoDateString(endOfWeek(today)),
+        toIsoDateString(endOfWeek(today))
       ],
       [Preset.LastWeek]: [
         toIsoDateString(startOfWeek(sub(today, { weeks: 1 }))),
-        toIsoDateString(endOfWeek(sub(today, { weeks: 1 }))),
+        toIsoDateString(endOfWeek(sub(today, { weeks: 1 })))
       ],
       [Preset.ThisMonth]: [
         toIsoDateString(startOfMonth(today)),
-        toIsoDateString(endOfMonth(today)),
+        toIsoDateString(endOfMonth(today))
       ],
       [Preset.LastMonth]: [
         toIsoDateString(startOfMonth(sub(today, { months: 1 }))),
-        toIsoDateString(endOfMonth(sub(today, { months: 1 }))),
+        toIsoDateString(endOfMonth(sub(today, { months: 1 })))
       ],
       [Preset.ThisYear]: [
         toIsoDateString(startOfYear(today)),
-        toIsoDateString(endOfYear(today)),
+        toIsoDateString(endOfYear(today))
       ],
       [Preset.LastYear]: [
         toIsoDateString(startOfYear(sub(today, { years: 1 }))),
-        toIsoDateString(endOfYear(sub(today, { years: 1 }))),
-      ],
+        toIsoDateString(endOfYear(sub(today, { years: 1 })))
+      ]
     };
   }
 
@@ -251,8 +251,8 @@ export default class DateRangeFilterComponent extends Component<Signature> {
           : null,
         [this.args.endQueryParam || 'end']: !this.endDateError?.length
           ? this.end
-          : null,
-      },
+          : null
+      }
     });
   }
 }

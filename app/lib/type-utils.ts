@@ -15,5 +15,5 @@ export const URI_MAP = {
   SESSION: `http://data.vlaanderen.be/ns/besluit#Zitting`,
   AGENDA_ITEM: `http://data.vlaanderen.be/ns/besluit#Agendapunt`,
   DECISION: `http://data.vlaanderen.be/ns/besluit#Besluit`,
-  VOTE: `http://data.vlaanderen.be/ns/besluit#Stemming`,
+  VOTE: `http://data.vlaanderen.be/ns/besluit#Stemming`
 } as const;

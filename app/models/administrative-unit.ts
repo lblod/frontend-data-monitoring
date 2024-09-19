@@ -3,7 +3,7 @@ import Model, {
   AsyncHasMany,
   attr,
   belongsTo,
-  hasMany,
+  hasMany
 } from '@ember-data/model';
 import AdministrativeUnitClasssificationCodeModel from './administrative-unit-classification-code';
 import GoverningBodyModel from './governing-body';
@@ -18,7 +18,7 @@ export default class AdministrativeUnitModel extends Model {
 
   @belongsTo('administrative-unit-classification-code', {
     async: true,
-    inverse: null,
+    inverse: null
   })
   declare classification: AsyncBelongsTo<AdministrativeUnitClasssificationCodeModel>;
 

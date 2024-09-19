@@ -3,7 +3,7 @@ import Model, {
   AsyncHasMany,
   attr,
   belongsTo,
-  hasMany,
+  hasMany
 } from '@ember-data/model';
 import { getFormattedDate } from 'frontend-data-monitoring/utils/get-formatted-date';
 import { getFormattedDateRange } from 'frontend-data-monitoring/utils/get-formatted-date-range';

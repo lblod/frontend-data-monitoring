@@ -28,14 +28,14 @@ Router.map(function () {
   this.route('help');
   this.route('legal', { path: '/legaal' }, function () {
     this.route('accessibilitystatement', {
-      path: '/toegangkelijkheidsverklaring',
+      path: '/toegangkelijkheidsverklaring'
     });
     this.route('cookiestatement', {
-      path: '/cookieverklaring',
+      path: '/cookieverklaring'
     });
     this.route('disclaimer');
   });
   this.route('404', {
-    path: '/*wildcard',
+    path: '/*wildcard'
   });
 });

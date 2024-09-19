@@ -10,8 +10,8 @@ export default class MockLoginAuthenticator extends BaseAuthenticator {
       method: 'GET',
       credentials: supportedCredentials,
       headers: new Headers({
-        'Content-Type': contentType,
-      }),
+        'Content-Type': contentType
+      })
     });
     if (result.ok) return result.json();
     else throw result;
@@ -26,23 +26,23 @@ export default class MockLoginAuthenticator extends BaseAuthenticator {
             account: {
               data: {
                 id: accountId,
-                type: 'accounts',
-              },
+                type: 'accounts'
+              }
             },
             group: {
               data: {
                 id: groupId,
-                type: 'groups',
-              },
-            },
+                type: 'groups'
+              }
+            }
           },
-          type: 'sessions',
-        },
+          type: 'sessions'
+        }
       }),
       credentials: supportedCredentials,
       headers: new Headers({
-        'Content-Type': contentType,
-      }),
+        'Content-Type': contentType
+      })
     });
     if (result.ok) return result.json();
     else throw result;
@@ -54,8 +54,8 @@ export default class MockLoginAuthenticator extends BaseAuthenticator {
       method: 'DELETE',
       credentials: supportedCredentials,
       headers: new Headers({
-        'Content-Type': contentType,
-      }),
+        'Content-Type': contentType
+      })
     });
     if (result.ok) return result;
     else throw result;

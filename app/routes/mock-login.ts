@@ -23,8 +23,8 @@ export default class MockLoginRoute extends Route<
 
   queryParams = {
     page: {
-      refreshModel: true,
-    },
+      refreshModel: true
+    }
   };
 
   async beforeModel() {
@@ -38,7 +38,7 @@ export default class MockLoginRoute extends Route<
 
   loadAccounts = task({ keepLatest: true }, async (params) => {
     const filter: Record<string, string | object> = {
-      provider: 'https://github.com/lblod/mock-login-service',
+      provider: 'https://github.com/lblod/mock-login-service'
     };
     if (params.gemeente) filter['user'] = { groups: params.gemeente };
     try {
@@ -46,7 +46,7 @@ export default class MockLoginRoute extends Route<
         include: 'user,user.groups',
         filter: filter,
         page: { size: 10, number: params.page },
-        sort: 'user.family-name',
+        sort: 'user.family-name'
       });
       return accounts;
     } catch (error) {

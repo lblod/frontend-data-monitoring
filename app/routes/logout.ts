@@ -15,7 +15,7 @@ export default class AuthLogoutRoute extends Route {
         const wasMockLoginSession = this.session.isMockLoginSession;
         await this.session.invalidate();
         const logoutUrl = wasMockLoginSession
-          ? this.router.urlFor('mock-login')
+          ? this.router.urlFor('auth.login')
           : ENV.acmidm.logoutUrl;
 
         window.location.replace(logoutUrl);

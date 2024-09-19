@@ -26,16 +26,16 @@ export default class OrgReportRoute extends Route {
   @service declare currentSession: CurrentSessionService;
   queryParams = {
     begin: {
-      refreshModel: true,
+      refreshModel: true
     },
     eind: {
-      refreshModel: true,
-    },
+      refreshModel: true
+    }
   };
   async model(params: { begin: string; eind: string }): Promise<object> {
     return {
       lastHarvestingDate: this.getLastHarvestingDate.perform(),
-      data: this.getData.perform(params),
+      data: this.getData.perform(params)
     };
   }
 
@@ -44,7 +44,7 @@ export default class OrgReportRoute extends Route {
       'last-harvesting-execution-record',
       {
         limit: 1,
-        sort: '-last-execution-time',
+        sort: '-last-execution-time'
       }
     );
     const lastHarvestingDate = lastHarvestingExecutionRecord.slice()[0];
@@ -67,7 +67,7 @@ export default class OrgReportRoute extends Route {
       amountOfPublicDecisions: 0,
       amountOfPublicVotes: 0,
       amountOfPublicAgendaItemsWithTitle: NaN,
-      amountOfPublicAgendaItemsWithDescription: NaN,
+      amountOfPublicAgendaItemsWithDescription: NaN
     };
     try {
       const adminUnitCountReports: ArrayProxy<AdminUnitCountReportModel> =
@@ -78,9 +78,9 @@ export default class OrgReportRoute extends Route {
           filter: {
             'governing-body-count-report': {
               ':gte:day': fromDate,
-              ':lte:day': toDate,
-            },
-          },
+              ':lte:day': toDate
+            }
+          }
         });
 
       if (adminUnitCountReports.length === 0) return countResult;

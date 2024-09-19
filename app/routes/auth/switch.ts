@@ -32,7 +32,7 @@ export default class AuthSwitchRoute extends Route {
 function buildSwitchUrl({
   logoutUrl,
   clientId,
-  switchRedirectUrl,
+  switchRedirectUrl
 }: AcmidmParams) {
   const switchUrl = new URL(logoutUrl);
   const searchParams = switchUrl.searchParams;

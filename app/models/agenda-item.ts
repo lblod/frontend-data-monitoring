@@ -4,7 +4,7 @@ import Model, {
   SyncHasMany,
   attr,
   belongsTo,
-  hasMany,
+  hasMany
 } from '@ember-data/model';
 import { sortSessions } from 'frontend-data-monitoring/utils/sort-sessions';
 import AgendaItemHandlingModel from './agenda-item-handling';
@@ -75,24 +75,24 @@ export default class AgendaItemModel extends Model {
     const properties = [
       {
         property: 'title',
-        formattedProperty: 'Titel',
+        formattedProperty: 'Titel'
       },
       {
         property: 'description',
-        formattedProperty: 'Beschrijving',
+        formattedProperty: 'Beschrijving'
       },
       {
         property: 'dateFormatted',
-        formattedProperty: 'Datum',
+        formattedProperty: 'Datum'
       },
       {
         property: 'municipality',
-        formattedProperty: 'Bestuurseenheid',
+        formattedProperty: 'Bestuurseenheid'
       },
       {
         property: 'governingBodyNameResolved',
-        formattedProperty: 'Bestuursorgaan',
-      },
+        formattedProperty: 'Bestuursorgaan'
+      }
     ];
 
     const qualityMetrics: { label: string; value: boolean }[] = [];
@@ -101,7 +101,7 @@ export default class AgendaItemModel extends Model {
       const value = this[property.property as keyof AgendaItemModel];
       qualityMetrics.push({
         label: property.formattedProperty,
-        value: !!value,
+        value: !!value
       });
     });
 

@@ -11,7 +11,7 @@ export default class UserModel extends Model {
   @hasMany('administrative-unit', {
     inverse: null,
     async: true,
-    polymorphic: true,
+    polymorphic: true
   })
   declare groups: AsyncHasMany<AdministrativeUnitModel>;
 

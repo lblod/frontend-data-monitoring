@@ -79,14 +79,14 @@ export default class SelectMultipleFilterComponent extends FilterComponent<Signa
       deserializeArray(this.args.queryParam).reduce((acc, value) => {
         return {
           ...acc,
-          [value]: undefined,
+          [value]: undefined
         };
       }, {});
 
     const queryParams = selectedOptions.reduce((acc, { label, type }) => {
       return {
         ...acc,
-        ...(type && { [type]: acc[type] ? `${acc[type]}+${label}` : label }),
+        ...(type && { [type]: acc[type] ? `${acc[type]}+${label}` : label })
       };
     }, emptyQueryParams);
 

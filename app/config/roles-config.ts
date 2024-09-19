@@ -8,16 +8,16 @@ export interface RoleDetails {
 const roleConfig: Record<string, RoleDetails> = {
   'DM-AdminUnitAdministratorRole': {
     description: 'Can only view its own data.',
-    enum: 'OrgUser',
+    enum: 'OrgUser'
   },
   'DM-LeveranciersGebruiker': {
     description: 'Can view municipalities they are responsible for.',
-    enum: 'SupplierUser',
+    enum: 'SupplierUser'
   },
   'DM-AbbGebruiker': {
     description: 'Can view all municipalities.',
-    enum: 'AbbUser',
-  },
+    enum: 'AbbUser'
+  }
 };
 
 export default roleConfig;

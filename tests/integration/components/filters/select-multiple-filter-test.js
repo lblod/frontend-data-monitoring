@@ -18,22 +18,22 @@ module(
           groupName: 'Group 1',
           options: [
             { label: 'Option 1', type: 'type1' },
-            { label: 'Option 2', type: 'type2' },
-          ],
+            { label: 'Option 2', type: 'type2' }
+          ]
         },
         {
           groupName: 'Group 2',
           options: [
             { label: 'Option 3', type: 'type3' },
-            { label: 'Option 4', type: 'type4' },
-          ],
-        },
+            { label: 'Option 4', type: 'type4' }
+          ]
+        }
       ];
       const searchField = 'label';
       const queryParam = 'type1+type3';
       const selected = [
         { label: 'Option 1', type: 'type1' },
-        { label: 'Option 3', type: 'type3' },
+        { label: 'Option 3', type: 'type3' }
       ];
 
       this.setProperties({ options, searchField, queryParam, selected });
@@ -63,22 +63,22 @@ module(
           groupName: 'Group 1',
           options: [
             { label: 'Option 1', type: 'type1' },
-            { label: 'Option 2', type: 'type2' },
-          ],
+            { label: 'Option 2', type: 'type2' }
+          ]
         },
         {
           groupName: 'Group 2',
           options: [
             { label: 'Option 3', type: 'type3' },
-            { label: 'Option 4', type: 'type4' },
-          ],
-        },
+            { label: 'Option 4', type: 'type4' }
+          ]
+        }
       ];
       const searchField = 'label';
       const queryParam = 'type1+type3';
       const selected = [
         { label: 'Option 1', type: 'type1' },
-        { label: 'Option 3', type: 'type3' },
+        { label: 'Option 3', type: 'type3' }
       ];
 
       this.setProperties({ options, searchField, queryParam, selected });
@@ -116,9 +116,9 @@ module(
           groupName: 'Group 1',
           options: [
             { label: 'Option 1', type: 'type1' },
-            { label: 'Option 1', type: 'type2' },
-          ],
-        },
+            { label: 'Option 1', type: 'type2' }
+          ]
+        }
       ];
       const searchField = 'label';
       const queryParam = 'type1';

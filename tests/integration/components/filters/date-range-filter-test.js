@@ -57,9 +57,9 @@ module('Integration | Component | filters/date-range-filter', function (hooks) {
         {
           queryParams: {
             end: null,
-            start: '2023-01-01',
-          },
-        },
+            start: '2023-01-01'
+          }
+        }
       ]);
     });
 
@@ -73,14 +73,14 @@ module('Integration | Component | filters/date-range-filter', function (hooks) {
       assert.deepEqual(this.router.transitionTo.getCall(0).args[0], {
         queryParams: {
           end: null,
-          start: '2023-01-01',
-        },
+          start: '2023-01-01'
+        }
       });
       assert.deepEqual(this.router.transitionTo.getCall(1).args[0], {
         queryParams: {
           end: null,
-          start: null,
-        },
+          start: null
+        }
       });
     });
 
@@ -139,9 +139,9 @@ module('Integration | Component | filters/date-range-filter', function (hooks) {
         {
           queryParams: {
             end: null,
-            start: '2023-12-31',
-          },
-        },
+            start: '2023-12-31'
+          }
+        }
       ]);
     });
   });

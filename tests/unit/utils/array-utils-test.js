@@ -9,7 +9,7 @@ module('Unit | Utility | array-utils', function () {
         { title: 'Banana 10' },
         { title: 'Orange' },
         { title: '3. Apple' },
-        { title: 'Banana 2' },
+        { title: 'Banana 2' }
       ];
 
       const sorted = [
@@ -17,7 +17,7 @@ module('Unit | Utility | array-utils', function () {
         { title: '10. Apple' },
         { title: 'Banana 2' },
         { title: 'Banana 10' },
-        { title: 'Orange' },
+        { title: 'Orange' }
       ];
 
       const result = source.sort(sortObjectsByTitle);

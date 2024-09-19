@@ -38,7 +38,7 @@ export default class MockLoginController extends Controller {
 
   queryStore = task({ drop: true }, async () => {
     const filter: Record<string, string | object> = {
-      provider: 'https://github.com/lblod/mock-login-service',
+      provider: 'https://github.com/lblod/mock-login-service'
     };
     if (this.gemeente) {
       filter['user'] = { groups: this.gemeente };
@@ -47,7 +47,7 @@ export default class MockLoginController extends Controller {
       include: 'user,user.groups',
       filter: filter,
       page: { size: 10, number: this.page },
-      sort: 'user.family-name',
+      sort: 'user.family-name'
     });
     return accounts;
   });

@@ -7,7 +7,7 @@ module.exports = function (environment) {
     rootURL: '/',
     locationType: 'history',
     EmberENV: {
-      EXTEND_PROTOTYPES: false,
+      EXTEND_PROTOTYPES: false
     },
     acmidm: {
       clientId: '{{OAUTH_API_KEY}}',
@@ -15,7 +15,7 @@ module.exports = function (environment) {
       authUrl: '{{OAUTH_API_BASE_URL}}',
       logoutUrl: '{{OAUTH_API_LOGOUT_URL}}',
       authRedirectUrl: '{{OAUTH_API_REDIRECT_URL}}',
-      switchRedirectUrl: '{{OAUTH_SWITCH_URL}}',
+      switchRedirectUrl: '{{OAUTH_SWITCH_URL}}'
     },
     APP: {
       // Here you can pass flags/options to your application instance
@@ -23,7 +23,7 @@ module.exports = function (environment) {
     },
     features: {
       // define feature flags here
-    },
+    }
   };
 
   if (environment === 'test') {

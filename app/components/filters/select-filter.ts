@@ -8,7 +8,7 @@ export default class SelectFilterComponent extends FilterComponent {
       ? (get(m, this.args.searchField) as string | undefined)
       : undefined;
     this.updateQueryParams({
-      [this.args.queryParam]: value,
+      [this.args.queryParam]: value
     });
   }
 }

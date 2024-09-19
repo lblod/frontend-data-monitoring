@@ -23,7 +23,7 @@ export default class TextFilterComponent extends FilterComponent<Signature> {
     event.preventDefault();
 
     this.updateQueryParams({
-      [this.args.queryParam]: this.value,
+      [this.args.queryParam]: this.value
     });
   }
 }
