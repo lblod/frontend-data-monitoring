@@ -24,6 +24,7 @@ declare const config: {
   };
   features: Record<string, boolean | string>;
   acmidm: AcmidmParams;
+  CORS_PROXY_URL: string;
 };
 
 export default config;

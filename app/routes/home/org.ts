@@ -9,6 +9,13 @@ import AdminUnitCountReportModel from 'frontend-data-monitoring/models/admin-uni
 import GoverningBodyCountReportModel from 'frontend-data-monitoring/models/governing-body-count-report';
 import ArrayProxy from '@ember/array/proxy';
 import PublicationCountReportModel from 'frontend-data-monitoring/models/publication-count-report';
+import ENV from 'frontend-data-monitoring/config/environment';
+import {
+  validatePublication,
+  fetchDocument,
+  getExampleOfDocumentType
+} from '@lblod/lib-decision-validation';
+import { getBlueprintOfDocumentType } from '@lblod/lib-decision-validation/dist/queries.js';
 
 export type CountResult = {
   firstPublishedSessionDate: number;
@@ -35,7 +42,8 @@ export default class OrgReportRoute extends Route {
   async model(params: { begin: string; eind: string }): Promise<object> {
     return {
       lastHarvestingDate: this.getLastHarvestingDate.perform(),
-      data: this.getData.perform(params)
+      data: this.getData.perform(params),
+      maturityLevel: this.getMaturityLevel.perform()
     };
   }
 
@@ -109,5 +117,28 @@ export default class OrgReportRoute extends Route {
     } catch (error) {
       return countResult;
     }
+  });
+
+  getMaturityLevel = task({ drop: true }, async () => {
+    const maturityLevels = await this.store.query('maturity-level-report', {
+      limit: 1
+    });
+    console.log(maturityLevels);
+    const maturityLevel = maturityLevels.slice()[0];
+    if (!maturityLevel) return null;
+    const blueprint = await getBlueprintOfDocumentType('Notulen');
+    const example = await getExampleOfDocumentType('Notulen');
+    const publication = await fetchDocument(
+      maturityLevel.notuleUri,
+      ENV.CORS_PROXY_URL
+    );
+
+    const validationResult = await validatePublication(
+      publication,
+      blueprint,
+      example
+    );
+    console.log(validationResult);
+    return validationResult;
   });
 }
