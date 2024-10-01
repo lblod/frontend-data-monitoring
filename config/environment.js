@@ -3,6 +3,7 @@
 module.exports = function (environment) {
   const ENV = {
     modulePrefix: 'frontend-data-monitoring',
+    CORS_PROXY_URL: '{{CORS_PROXY_URL}}',
     environment,
     rootURL: '/',
     locationType: 'history',

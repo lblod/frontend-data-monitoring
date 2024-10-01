@@ -51,14 +51,20 @@
 
       <section class>
         <p>Maturiteitsniveaus bestuursorganen</p>
-        <AuPill @icon="info-circle">Een maturiteitsniveau toont de mate van
-          volwassenheid van een leverancier in datakwaliteit en hergebruik.
+        <AuPill @icon="info-circle">
+          {{#if this.model.maturityLevel.isRunning}}
+            aan het laden..
+          {{else}}
+            {{#if this.model.maturityLevel.value.maturity}}
+              {{this.model.maturityLevel.value.maturity}}
+            {{else}}
+              is niet opgegeven.
+            {{/if}}
+          {{/if}}
         </AuPill>
-
         <div
           class="au-u-flex au-u-1-1 au-u-flex--between au-u-flex--spaced au-u-padding-top au-u-padding-bottom"
         >
-
           <article
             class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
           >

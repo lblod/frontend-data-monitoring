@@ -133,10 +133,11 @@
     "tracked-toolbox": "^2.0.0",
     "typescript": "^5.6.2",
     "webpack": "^5.94.0",
-    "webpack-bundle-analyzer": "^4.10.2"
+    "webpack-bundle-analyzer": "^4.10.2",
+    "@lblod/lib-decision-validation": "^1.0.34-pre-release"
   },
   "engines": {
-    "node": "14.* || 16.* || >= 18"
+    "node": "16.* || >= 18"
   },
   "ember": {
     "edition": "octane"

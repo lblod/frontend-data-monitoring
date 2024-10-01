@@ -14,5 +14,6 @@ export default class HomeRoute extends Route {
     await this.session.setup();
     await this.currentSession.load();
     this.session.requireAuthentication(transition, 'auth.login');
+    
   }
 }
