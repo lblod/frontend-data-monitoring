@@ -4,7 +4,6 @@ import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import { task } from 'ember-concurrency';
-import { URI_MAP } from 'frontend-data-monitoring/lib/type-utils';
 import AdminUnitCountReportModel from 'frontend-data-monitoring/models/admin-unit-count-report';
 import GoverningBodyCountReportModel from 'frontend-data-monitoring/models/governing-body-count-report';
 import ArrayProxy from '@ember/array/proxy';
@@ -16,6 +15,7 @@ import {
   getExampleOfDocumentType
 } from '@lblod/lib-decision-validation';
 import { getBlueprintOfDocumentType } from '@lblod/lib-decision-validation/dist/queries.js';
+import { uriToResultKeyMap } from 'frontend-data-monitoring/lib/type-utils';
 
 export type CountResult = {
   firstPublishedSessionDate: number;
@@ -74,8 +74,8 @@ export default class OrgReportRoute extends Route {
       amountOfPublicAgendaItems: 0,
       amountOfPublicDecisions: 0,
       amountOfPublicVotes: 0,
-      amountOfPublicAgendaItemsWithTitle: NaN,
-      amountOfPublicAgendaItemsWithDescription: NaN
+      amountOfPublicAgendaItemsWithTitle: 0,
+      amountOfPublicAgendaItemsWithDescription: 0
     };
     try {
       const adminUnitCountReports: ArrayProxy<AdminUnitCountReportModel> =
@@ -92,6 +92,7 @@ export default class OrgReportRoute extends Route {
         });
 
       if (adminUnitCountReports.length === 0) return countResult;
+
       for (const adminUnitCountReport of adminUnitCountReports.slice()) {
         const governingBodyCountReports: ArrayProxy<GoverningBodyCountReportModel> =
           await adminUnitCountReport.governingBodyCountReport;
@@ -100,17 +101,17 @@ export default class OrgReportRoute extends Route {
           const publicationCountReports: ArrayProxy<PublicationCountReportModel> =
             await governingBodyCountReport.publicationCountReport;
 
-          const findCount = (targetClass: string): number =>
-            publicationCountReports.find(
-              (report) => report.targetClass === targetClass
-            )?.count ?? 0;
+          publicationCountReports.forEach((report) => {
+            const targetClass = report.targetClass;
+            const count = report.get('count') ?? 0;
 
-          countResult.amountOfPublicSessions += findCount(URI_MAP.SESSION);
-          countResult.amountOfPublicAgendaItems += findCount(
-            URI_MAP.AGENDA_ITEM
-          );
-          countResult.amountOfPublicDecisions += findCount(URI_MAP.DECISION);
-          countResult.amountOfPublicVotes += findCount(URI_MAP.VOTE);
+            if (targetClass in uriToResultKeyMap) {
+              const normalizedTargetClass = targetClass.trim();
+              const resultKey = uriToResultKeyMap[normalizedTargetClass];
+
+              if (resultKey) countResult[resultKey] += count;
+            }
+          });
         }
       }
       return countResult;
@@ -123,7 +124,6 @@ export default class OrgReportRoute extends Route {
     const maturityLevels = await this.store.query('maturity-level-report', {
       limit: 1
     });
-    console.log(maturityLevels);
     const maturityLevel = maturityLevels.slice()[0];
     if (!maturityLevel) return null;
     const blueprint = await getBlueprintOfDocumentType('Notulen');
@@ -138,7 +138,6 @@ export default class OrgReportRoute extends Route {
       blueprint,
       example
     );
-    console.log(validationResult);
     return validationResult;
   });
 }
