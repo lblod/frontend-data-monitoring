@@ -103,19 +103,18 @@ export default class OrgReportRoute extends Route {
 
           publicationCountReports.forEach((report) => {
             const targetClass = report.targetClass;
-            const count = report.get('count') ?? 0;
+            const resultKey = uriToResultKeyMap[targetClass];
 
-            if (targetClass in uriToResultKeyMap) {
-              const normalizedTargetClass = targetClass.trim();
-              const resultKey = uriToResultKeyMap[normalizedTargetClass];
-
-              if (resultKey) countResult[resultKey] += count;
+            if (resultKey) {
+              const count = report.get('count') ?? 0;
+              countResult[resultKey] += count;
             }
           });
         }
       }
       return countResult;
     } catch (error) {
+      console.error('Error fetching data:', error);
       return countResult;
     }
   });
