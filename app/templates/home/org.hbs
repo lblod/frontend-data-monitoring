@@ -109,20 +109,32 @@
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Eerste gepubliceerde zitting</p>
               <p class="au-u-h4">
-                {{#if this.isLoading}}
+                {{#if this.model.sessionTimestamps.isRunning}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  {{this.data.firstPublishedSessionDate}}
+                  {{#if this.model.sessionTimestamps.value.firstSession}}
+                    {{date-format
+                      this.model.sessionTimestamps.value.firstSession
+                    }}
+                  {{else}}
+                    is niet opgegeven.
+                  {{/if}}
                 {{/if}}
               </p>
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Laatste gepubliceerde zitting</p>
               <p class="au-u-h4">
-                {{#if this.isLoading}}
+                {{#if this.model.sessionTimestamps.isRunning}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  {{this.data.lastPublishedSessionDate}}
+                  {{#if this.model.sessionTimestamps.value.lastSession}}
+                    {{date-format
+                      this.model.sessionTimestamps.value.lastSession
+                    }}
+                  {{else}}
+                    is niet opgegeven.
+                  {{/if}}
                 {{/if}}
               </p>
             </span>
