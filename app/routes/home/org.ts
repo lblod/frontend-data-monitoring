@@ -18,8 +18,6 @@ import { getBlueprintOfDocumentType } from '@lblod/lib-decision-validation/dist/
 import { uriToResultKeyMap } from 'frontend-data-monitoring/lib/type-utils';
 
 export type CountResult = {
-  firstPublishedSessionDate: number;
-  lastPublishedSessionDate: number;
   amountOfPublicSessions: number;
   amountOfPublicAgendaItems: number;
   amountOfPublicDecisions: number;
@@ -43,7 +41,8 @@ export default class OrgReportRoute extends Route {
     return {
       lastHarvestingDate: this.getLastHarvestingDate.perform(),
       data: this.getData.perform(params),
-      maturityLevel: this.getMaturityLevel.perform()
+      maturityLevel: this.getMaturityLevel.perform(),
+      sessionTimestamps: this.getSessionTimestamps.perform()
     };
   }
 
@@ -68,8 +67,6 @@ export default class OrgReportRoute extends Route {
       ? new Date(params.eind).toISOString().split('T')[0]
       : new Date().toISOString().split('T')[0];
     const countResult = {
-      firstPublishedSessionDate: NaN,
-      lastPublishedSessionDate: NaN,
       amountOfPublicSessions: 0,
       amountOfPublicAgendaItems: 0,
       amountOfPublicDecisions: 0,
@@ -138,5 +135,16 @@ export default class OrgReportRoute extends Route {
       example
     );
     return validationResult;
+  });
+
+  getSessionTimestamps = task({ drop: true }, async () => {
+    const sessionTimestamps = await this.store.query(
+      'session-timestamp-report',
+      {
+        limit: 1,
+        sort: '-created-at'
+      }
+    );
+    return sessionTimestamps.slice()[0];
   });
 }
