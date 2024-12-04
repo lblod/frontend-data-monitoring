@@ -3,23 +3,35 @@
     id="filtercontent"
     class="c-interface__content au-u-flex au-u-flex--column"
   >
-
     <AuContent class="au-o-flow au-o-flow--small au-u-padding">
-
       <section class="au-u-flex au-u-flex--between">
         <AuHeading
           @level="1"
           @skin="2"
-        >{{this.currentSession.fullName}}</AuHeading>
+          class="au-u-flex au-u-au-u-flex--center au-u-flex--vertical-center"
+        >{{this.currentSession.fullName}}
+          <AuPill
+            @skin="success"
+            class="au-u-margin-left-small"
+          >Maturiteitsniveau:
+            {{#if this.model.maturityLevel.isRunning}}
+              aan het laden..
+            {{else}}
+              {{#if this.model.maturityLevel.value}}
+                {{this.model.maturityLevel.value}}
+              {{else}}
+                is niet opgegeven.
+              {{/if}}
+            {{/if}}
+          </AuPill>
+        </AuHeading>
         <AuButton>Exporteer rapport</AuButton>
       </section>
-      <section class="au-u-flex au-u-flex--between">
-        <span>
-          <p>
-            De data voor de monitoringstool wordt verzameld uit de door lokale
-            overheden gepubliceerde datasets.
-          </p>
-        </span>
+      <section class="au-u-flex au-u-flex--between au-u-margin-top-tiny">
+        <p>
+          De data voor de monitoringstool wordt verzameld uit de door lokale
+          overheden gepubliceerde datasets.
+        </p>
         <AuPill @skin="default" @icon="clock-rewind">Laatste harvesting
           {{#if this.lastHarvestingDateIsLoading}}
             aan het laden..
@@ -49,45 +61,6 @@
         </span>
       </section>
 
-      <section class>
-        <p>Maturiteitsniveaus bestuursorganen</p>
-        <AuPill @icon="info-circle">
-          {{#if this.model.maturityLevel.isRunning}}
-            aan het laden..
-          {{else}}
-            {{#if this.model.maturityLevel.value.maturity}}
-              {{this.model.maturityLevel.value.maturity}}
-            {{else}}
-              is niet opgegeven.
-            {{/if}}
-          {{/if}}
-        </AuPill>
-        <div
-          class="au-u-flex au-u-1-1 au-u-flex--between au-u-flex--spaced au-u-padding-top au-u-padding-bottom"
-        >
-          <article
-            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
-          >
-            <p class="au-u-medium">Burgemeester</p>
-            <p class="au-u-h3 au-u-bold">N</p>
-          </article>
-
-          <article
-            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
-          >
-            <p class="au-u-medium">College van burgemeester en schepenen</p>
-            <p class="au-u-h3 au-u-bold">N</p>
-          </article>
-
-          <article
-            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
-          >
-            <p class="au-u-medium">Gemeenteraad</p>
-            <p class="au-u-h3 au-u-bold">N</p>
-          </article>
-        </div>
-      </section>
-
       <section>
         <AuHeading @level="5" @skin="5">Publicate Statistieken</AuHeading>
         <div class="au-u-1-1 au-o-grid au-o-grid--tiny au-u-padding-top-small">
@@ -98,7 +71,7 @@
           >
             <span class="au-u-flex au-u-flex--column">
               <p class="au-u-medium">Aantal gepubliceerde zittingen</p>
-              <p class="au-u-h2 au-u-bold">
+              <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
@@ -146,7 +119,7 @@
           >
             <span class="au-u-flex au-u-flex--column">
               <p class="au-u-medium">Aantal gepubliceerde agendapunten</p>
-              <p class="au-u-h2 au-u-bold">
+              <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
@@ -156,7 +129,7 @@
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Aantal agendapunten met titels</p>
-              <p class="au-u-h2 au-u-bold">
+              <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
@@ -166,7 +139,7 @@
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Aantal agendapunten met beschrijving</p>
-              <p class="au-u-h2 au-u-bold">
+              <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
@@ -182,7 +155,7 @@
           >
             <span class="au-u-flex au-u-flex--column">
               <p class="au-u-medium">Aantal gepubliceerde besluiten</p>
-              <p class="au-u-h2 au-u-bold">
+              <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
@@ -198,7 +171,7 @@
           >
             <span class="au-u-flex au-u-flex--column">
               <p class="au-u-medium">Aantal gepubliceerde stemmingen</p>
-              <p class="au-u-h2 au-u-bold">
+              <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}

@@ -134,7 +134,15 @@ export default class OrgReportRoute extends Route {
       blueprint,
       example
     );
-    return validationResult;
+    const regex = /\d+/;
+    const match = regex.exec(validationResult.maturity);
+
+    if (match) {
+      const level = parseInt(match[0], 10);
+      return level;
+    } else {
+      return null;
+    }
   });
 
   getSessionTimestamps = task({ drop: true }, async () => {
