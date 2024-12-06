@@ -19,7 +19,6 @@ export default class AuthCallbackRoute extends Route<
   }
 
   async model({ code }: AuthCallbackRouteParams) {
-    console.log(code);
     if (code) {
       try {
         await this.session.authenticate('authenticator:acm-idm', code);
@@ -29,7 +28,6 @@ export default class AuthCallbackRoute extends Route<
         );
       }
     } else {
-      console.log('Code is not defined');
       this.router.replaceWith('auth.login');
     }
   }
