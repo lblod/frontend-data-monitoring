@@ -16,7 +16,7 @@ export default class ReportWrongDataComponent extends Component {
     };
   }
   get subject() {
-    return `Gegevens voor bestuur ${this.currentSession.group.name} zijn niet volledig of foutief`;
+    return `Correctie van foutieve gegevens met betrekking tot ${this.currentSession.groupClassification.label} ${this.currentSession.group.name}`;
   }
   get body() {
     const periode = this.queryParams.begin
