@@ -1,6 +1,6 @@
 export enum Role {
   Public = 'Public',
-  OrgUser = 'DMGEBRUIKER',
+  OrgUser = 'OrgUser',
   SupplierUser = 'SupplierUser',
   AbbUser = 'AbbUser'
 }
