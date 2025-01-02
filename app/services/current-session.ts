@@ -36,7 +36,6 @@ export default class CurrentSessionService extends Service {
           });
         }
         this.user = await this.account.user;
-        console.log(this.session.data.authenticated.data.attributes.roles);
         const roles = this.session.data.authenticated.data.attributes.roles as
           | string[]
           | undefined;

@@ -14,7 +14,6 @@ export default class ApplicationRoute extends Route {
     await this.session.setup();
     await this.currentSession.load();
     if (this.session.isAuthenticated) {
-      console.log('Authenticated', this.currentSession.roles);
       if (this.currentSession.checkRole(Role.OrgUser)) {
         this.router.transitionTo('home.org');
       } else if (
