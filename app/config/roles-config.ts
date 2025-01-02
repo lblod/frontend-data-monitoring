@@ -6,6 +6,10 @@ export interface RoleDetails {
 }
 
 const roleConfig: Record<string, RoleDetails> = {
+  DMGEBRUIKER: {
+    description: 'Can only view its own data.',
+    enum: 'OrgUser'
+  },
   'DM-AdminUnitAdministratorRole': {
     description: 'Can only view its own data.',
     enum: 'OrgUser'

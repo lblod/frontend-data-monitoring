@@ -24,6 +24,7 @@ Router.map(function () {
   if (config.acmidm.clientId === '{{OAUTH_API_KEY}}') {
     this.route('mock-login');
   }
+  this.route('switch-login');
 
   this.route('help');
   this.route('legal', { path: '/legaal' }, function () {
