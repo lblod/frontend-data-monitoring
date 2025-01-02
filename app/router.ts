@@ -18,7 +18,7 @@ Router.map(function () {
     this.route('callback-error');
     this.route('login');
     this.route('logout');
-    this.route('switch');
+    this.route('switch', { path: '/switch-login' });
   });
 
   if (config.acmidm.clientId === '{{OAUTH_API_KEY}}') {
