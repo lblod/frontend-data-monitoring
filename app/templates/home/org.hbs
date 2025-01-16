@@ -9,7 +9,8 @@
           @level="1"
           @skin="2"
           class="au-u-flex au-u-au-u-flex--center au-u-flex--vertical-center"
-        >{{this.currentSession.fullName}}
+        >{{this.currentSession.groupClassification.label}}
+          {{this.currentSession.group.name}}
           <AuPill
             @skin="success"
             class="au-u-margin-left-small"

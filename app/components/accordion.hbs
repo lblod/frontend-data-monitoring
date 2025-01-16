@@ -45,7 +45,7 @@
   {{#if this.isOpen}}
     <AuContent tabindex="0" data-test-accordion-content>
       {{#if this.loading}}
-        <AuLoader data-test-accordion-loader />
+        <AuLoader data-test-accordion-loader @hideMessage={{true}} />
       {{else}}
         {{yield}}
       {{/if}}
