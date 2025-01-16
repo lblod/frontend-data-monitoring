@@ -10,14 +10,13 @@ export default class AuthLogoutRoute extends Route {
   @service declare loketSession: LoketSessionService;
 
   async beforeModel(transition: Transition<unknown>) {
-    await this.loketSession.setup();
-
     if (this.loketSession.requireAuthentication(transition, 'auth.login')) {
       try {
-        this.loketSession.isMockLoginSession
+        await this.loketSession.invalidate();
+        const logoutUrl = this.loketSession.isMockLoginSession
           ? this.router.urlFor('auth.login')
           : ENV.acmidm.logoutUrl;
-        await this.loketSession.invalidate();
+        window.location.replace(logoutUrl);
       } catch (error) {
         throw new Error(
           'Something went wrong while trying to remove the loketSession on the server'
