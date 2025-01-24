@@ -53,7 +53,36 @@
           <ReportWrongData />
         </span>
       </section>
+      <div
+        class="au-u-flex au-u-1-1 au-u-flex--between au-u-flex--spaced au-u-padding-top au-u-padding-bottom"
+      >
+        <article
+          class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
+        >
+          <p class="au-u-medium">Burgemeester</p>
+          <p
+            class="au-u-h3 au-u-bold"
+          >{{this.data.amountOfBurgemeesterDecisions}}</p>
+        </article>
 
+        <article
+          class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
+        >
+          <p class="au-u-medium">College van burgemeester en schepenen</p>
+          <p
+            class="au-u-h3 au-u-bold"
+          >{{this.data.amountOfCollegeVanBurgemeesterEnSchepenenDecisions}}</p>
+        </article>
+
+        <article
+          class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
+        >
+          <p class="au-u-medium">Gemeenteraad</p>
+          <p
+            class="au-u-h3 au-u-bold"
+          >{{this.data.amountOfGemeenteraadDecisions}}</p>
+        </article>
+      </div>
       <section>
         <AuHeading @level="5" @skin="5">Publicate Statistieken</AuHeading>
         <div class="au-u-1-1 au-o-grid au-o-grid--tiny au-u-padding-top-small">

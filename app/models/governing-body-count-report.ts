@@ -12,6 +12,7 @@ import PublicationCountReportModel from './publication-count-report';
 export default class GoverningBodyCountReportModel extends Model {
   @attr('string') declare uuid: string;
   @attr('string') declare prefLabel: string;
+  @attr('string') declare classLabel: string;
   @attr('date') declare createdAt: Date;
   @attr('string') declare day: string;
 
