@@ -25,7 +25,11 @@ export type CountResult = {
   amountOfPublicAgendaItemsWithTitle: number;
   amountOfPublicAgendaItemsWithDescription: number;
 };
-
+enum ClassificationLabel {
+  Burgemeester = 'Burgemeester',
+  Gemeenteraad = 'Gemeenteraad',
+  CollegeVanBurgemeesterEnSchepenen = 'College van Burgemeester en Schepenen'
+}
 export default class OrgReportRoute extends Route {
   @service declare store: Store;
   @service declare currentSession: CurrentSessionService;
@@ -72,7 +76,10 @@ export default class OrgReportRoute extends Route {
       amountOfPublicDecisions: 0,
       amountOfPublicVotes: 0,
       amountOfPublicAgendaItemsWithTitle: 0,
-      amountOfPublicAgendaItemsWithDescription: 0
+      amountOfPublicAgendaItemsWithDescription: 0,
+      amountOfBurgemeesterDecisions: 0,
+      amountOfGemeenteraadDecisions: 0,
+      amountOfCollegeVanBurgemeesterEnSchepenenDecisions: 0
     };
     try {
       const adminUnitCountReports: ArrayProxy<AdminUnitCountReportModel> =
@@ -95,6 +102,7 @@ export default class OrgReportRoute extends Route {
           await adminUnitCountReport.governingBodyCountReport;
 
         for (const governingBodyCountReport of governingBodyCountReports.slice()) {
+          const classificationLabel = governingBodyCountReport.classLabel;
           const publicationCountReports: ArrayProxy<PublicationCountReportModel> =
             await governingBodyCountReport.publicationCountReport;
 
@@ -105,6 +113,24 @@ export default class OrgReportRoute extends Route {
             if (resultKey) {
               const count = report.get('count') ?? 0;
               countResult[resultKey] += count;
+              if (
+                uriToResultKeyMap[targetClass] === 'amountOfPublicDecisions'
+              ) {
+                switch (classificationLabel) {
+                  case ClassificationLabel.Burgemeester:
+                    countResult.amountOfBurgemeesterDecisions += count;
+                    break;
+                  case ClassificationLabel.Gemeenteraad:
+                    countResult.amountOfGemeenteraadDecisions += count;
+                    break;
+                  case ClassificationLabel.CollegeVanBurgemeesterEnSchepenen:
+                    countResult.amountOfCollegeVanBurgemeesterEnSchepenenDecisions +=
+                      count;
+                    break;
+                  default:
+                    break;
+                }
+              }
             }
           });
         }
