@@ -134,7 +134,7 @@
     "typescript": "^5.6.2",
     "webpack": "^5.94.0",
     "webpack-bundle-analyzer": "^4.10.2",
-    "@lblod/lib-decision-validation": "^1.0.34-pre-release"
+    "@lblod/lib-decision-validation": "^1.0.50"
   },
   "engines": {
     "node": "16.* || >= 18"
