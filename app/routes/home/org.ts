@@ -54,7 +54,7 @@ export default class OrgReportRoute extends Route {
     const lastHarvestingExecutionRecord = await this.store.query(
       'last-harvesting-execution-record',
       {
-        limit: 1,
+        page: { size: 1 },
         sort: '-last-execution-time'
       }
     );
@@ -175,7 +175,7 @@ export default class OrgReportRoute extends Route {
     const sessionTimestamps = await this.store.query(
       'session-timestamp-report',
       {
-        limit: 1,
+        page: { size: 1 },
         sort: '-created-at'
       }
     );
