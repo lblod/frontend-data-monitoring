@@ -144,7 +144,8 @@ export default class OrgReportRoute extends Route {
 
   getMaturityLevel = task({ drop: true }, async () => {
     const maturityLevels = await this.store.query('maturity-level-report', {
-      limit: 1
+      page: { size: 1 },
+      sort: '-created-at'
     });
     const maturityLevel = maturityLevels.slice()[0];
     if (!maturityLevel) return null;
@@ -162,9 +163,8 @@ export default class OrgReportRoute extends Route {
     );
     const regex = /\d+/;
     const match = regex.exec(validationResult.maturity);
-
     if (match) {
-      const level = parseInt(match[0], 10);
+      const level = parseInt(match[0], 10).toString();
       return level;
     } else {
       return null;
