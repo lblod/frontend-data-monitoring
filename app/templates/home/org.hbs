@@ -60,27 +60,30 @@
           class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
         >
           <p class="au-u-medium">Burgemeester</p>
-          <p
-            class="au-u-h3 au-u-bold"
-          >{{this.data.amountOfBurgemeesterDecisions}}</p>
+          <p class="au-u-h3 au-u-bold">{{format-number
+              this.data.amountOfBurgemeesterDecisions
+              0
+            }}</p>
         </article>
 
         <article
           class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
         >
           <p class="au-u-medium">College van burgemeester en schepenen</p>
-          <p
-            class="au-u-h3 au-u-bold"
-          >{{this.data.amountOfCollegeVanBurgemeesterEnSchepenenDecisions}}</p>
+          <p class="au-u-h3 au-u-bold">{{format-number
+              this.data.amountOfCollegeVanBurgemeesterEnSchepenenDecisions
+              0
+            }}</p>
         </article>
 
         <article
           class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
         >
           <p class="au-u-medium">Gemeenteraad</p>
-          <p
-            class="au-u-h3 au-u-bold"
-          >{{this.data.amountOfGemeenteraadDecisions}}</p>
+          <p class="au-u-h3 au-u-bold">{{format-number
+              this.data.amountOfGemeenteraadDecisions
+              0
+            }}</p>
         </article>
       </div>
       <section>
@@ -97,7 +100,7 @@
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  {{this.data.amountOfPublicSessions}}
+                  {{format-number this.data.amountOfPublicSessions 0}}
                 {{/if}}
               </p>
             </span>
@@ -145,7 +148,12 @@
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  {{this.data.amountOfPublicAgendaItems}}
+                  <AuLinkExternal
+                    href="http://localhost:4201/agendapunten?gemeentes={{this.currentSession.group.name}}"
+                    class="au-u-h2 au-u-medium black"
+                  >
+                    {{format-number this.data.amountOfPublicAgendaItems 0}}
+                  </AuLinkExternal>
                 {{/if}}
               </p>
             </span>
@@ -155,19 +163,37 @@
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  {{this.data.amountOfPublicAgendaItemsWithTitle}}
+                  <AuLinkExternal
+                    href="http://localhost:4201/agendapunten?gemeentes={{this.currentSession.group.name}}&trefwoord=-title*"
+                    class="au-u-h2 au-u-medium black"
+                  >
+                    {{format-number
+                      this.data.amountOfPublicAgendaItemsWithTitle
+                      0
+                    }}
+                  </AuLinkExternal>
                 {{/if}}
               </p>
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
               <p class="au-u-medium">Aantal agendapunten met beschrijving</p>
-              <p class="au-u-h2 au-u-medium">
+
+              <span class="au-u-h2 au-u-medium black">
+
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  {{this.data.amountOfPublicAgendaItemsWithDescription}}
+                  <AuLinkExternal
+                    href="http://localhost:4201/agendapunten?gemeentes={{this.currentSession.group.name}}&trefwoord=-description*"
+                    class="au-u-h2 au-u-medium black"
+                  >
+                    {{format-number
+                      this.data.amountOfPublicAgendaItemsWithDescription
+                      0
+                    }}
+                  </AuLinkExternal>
                 {{/if}}
-              </p>
+              </span>
             </span>
           </article>
 
@@ -181,7 +207,7 @@
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  {{this.data.amountOfPublicDecisions}}
+                  {{format-number this.data.amountOfPublicDecisions 0}}
                 {{/if}}
               </p>
             </span>
@@ -197,7 +223,7 @@
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  {{this.data.amountOfPublicVotes}}
+                  {{format-number this.data.amountOfPublicVotes 0}}
                 {{/if}}
               </p>
             </span>
