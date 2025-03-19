@@ -10,6 +10,7 @@ module.exports = function (environment) {
     EmberENV: {
       EXTEND_PROTOTYPES: false
     },
+    lokaalBeslistUrl: '{{LOKAALBESLIST_URL}}',
     acmidm: {
       clientId: '{{OAUTH_API_KEY}}',
       scope: '{{OAUTH_API_SCOPE}}',
@@ -33,6 +34,7 @@ module.exports = function (environment) {
     ENV.APP.LOG_VIEW_LOOKUPS = false;
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
+    ENV.lokaalBeslistUrl = 'http://localhost:4201';
   }
 
   return ENV;

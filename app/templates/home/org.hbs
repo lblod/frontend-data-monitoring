@@ -95,7 +95,11 @@
             class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
           >
             <span class="au-u-flex au-u-flex--column">
-              <p class="au-u-medium">Aantal gepubliceerde zittingen</p>
+              <p class="au-u-medium">Aantal gepubliceerde zittingen
+                <AuLinkExternal
+                  href="{{this.lokaalBeslistUrl}}zittingen?gemeentes={{this.currentSession.group.name}}"
+                  class="au-u-h5"
+                >Bekijk zittingen</AuLinkExternal></p>
               <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
@@ -143,55 +147,53 @@
             class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
           >
             <span class="au-u-flex au-u-flex--column">
-              <p class="au-u-medium">Aantal gepubliceerde agendapunten</p>
+              <p class="au-u-medium">Aantal gepubliceerde agendapunten
+                <AuLinkExternal
+                  href="{{this.lokaalBeslistUrl}}agendapunten?gemeentes={{this.currentSession.group.name}}"
+                  class="au-u-h5"
+                >Bekijk agendapunten</AuLinkExternal></p>
               <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  <AuLinkExternal
-                    href="http://localhost:4201/agendapunten?gemeentes={{this.currentSession.group.name}}"
-                    class="au-u-h2 au-u-medium black"
-                  >
-                    {{format-number this.data.amountOfPublicAgendaItems 0}}
-                  </AuLinkExternal>
+                  {{format-number this.data.amountOfPublicAgendaItems 0}}
                 {{/if}}
               </p>
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
-              <p class="au-u-medium">Aantal agendapunten met titels</p>
+              <p class="au-u-medium">Aantal agendapunten met titels
+                <AuLinkExternal
+                  href="{{this.lokaalBeslistUrl}}agendapunten?gemeentes={{this.currentSession.group.name}}&trefwoord=-title*"
+                  class="au-u-h5"
+                >Bekijk agendapunten</AuLinkExternal>
+              </p>
               <p class="au-u-h2 au-u-medium">
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  <AuLinkExternal
-                    href="http://localhost:4201/agendapunten?gemeentes={{this.currentSession.group.name}}&trefwoord=-title*"
-                    class="au-u-h2 au-u-medium black"
-                  >
-                    {{format-number
-                      this.data.amountOfPublicAgendaItemsWithTitle
-                      0
-                    }}
-                  </AuLinkExternal>
+                  {{format-number
+                    this.data.amountOfPublicAgendaItemsWithTitle
+                    0
+                  }}
                 {{/if}}
               </p>
             </span>
             <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
-              <p class="au-u-medium">Aantal agendapunten met beschrijving</p>
+              <p class="au-u-medium">Aantal agendapunten met beschrijving
+                <AuLinkExternal
+                  href="{{this.lokaalBeslistUrl}}agendapunten?gemeentes={{this.currentSession.group.name}}&trefwoord=-description*"
+                  class="au-u-h5"
+                >Bekijk agendapunten</AuLinkExternal></p>
 
               <span class="au-u-h2 au-u-medium black">
 
                 {{#if this.isLoading}}
                   <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
                 {{else}}
-                  <AuLinkExternal
-                    href="http://localhost:4201/agendapunten?gemeentes={{this.currentSession.group.name}}&trefwoord=-description*"
-                    class="au-u-h2 au-u-medium black"
-                  >
-                    {{format-number
-                      this.data.amountOfPublicAgendaItemsWithDescription
-                      0
-                    }}
-                  </AuLinkExternal>
+                  {{format-number
+                    this.data.amountOfPublicAgendaItemsWithDescription
+                    0
+                  }}
                 {{/if}}
               </span>
             </span>

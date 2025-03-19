@@ -13,6 +13,7 @@ type AcmidmParams = {
 
 declare const config: {
   environment: string;
+  lokaalBeslistUrl: string;
   modulePrefix: string;
   podModulePrefix: string;
   locationType: 'history' | 'none';
