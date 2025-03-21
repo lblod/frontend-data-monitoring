@@ -24,6 +24,7 @@ export type CountResult = {
   amountOfPublicVotes: number;
   amountOfPublicAgendaItemsWithTitle: number;
   amountOfPublicAgendaItemsWithDescription: number;
+  amountOfDuplicateAgendaItems: number;
 };
 enum ClassificationLabel {
   Burgemeester = 'Burgemeester',
@@ -79,7 +80,8 @@ export default class OrgReportRoute extends Route {
       amountOfPublicAgendaItemsWithDescription: 0,
       amountOfBurgemeesterDecisions: 0,
       amountOfGemeenteraadDecisions: 0,
-      amountOfCollegeVanBurgemeesterEnSchepenenDecisions: 0
+      amountOfCollegeVanBurgemeesterEnSchepenenDecisions: 0,
+      amountOfDuplicateAgendaItems: 0
     };
     try {
       const adminUnitCountReports: ArrayProxy<AdminUnitCountReportModel> =

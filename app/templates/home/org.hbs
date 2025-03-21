@@ -253,6 +253,26 @@
               </p>
             </span>
           </article>
+
+          {{! Duplicate agendaitems with the same uri }}
+          <article
+            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
+          >
+            <span class="au-u-flex au-u-flex--column">
+              <p class="au-u-medium">Aantal dubbele agendapunten
+                <AuLinkExternal
+                  href="{{this.lokaalBeslistUrl}}agendapunten?gemeentes={{this.currentSession.group.name}}"
+                  class="au-u-h6 au-u-margin-left-tiny"
+                >Bekijk agendapunten</AuLinkExternal></p>
+              <p class="au-u-h2 au-u-medium">
+                {{#if this.isLoading}}
+                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+                {{else}}
+                  {{format-number this.data.amountOfDuplicateAgendaItems 0}}
+                {{/if}}
+              </p>
+            </span>
+          </article>
         </div>
       </section>
 
