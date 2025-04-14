@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { CountResult } from 'frontend-data-monitoring/routes/home/org';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
+import ENV from 'frontend-data-monitoring/config/environment';
 
 export default class HomeOrgReportController extends Controller {
   @service declare loketSession: LoketSessionService;
@@ -41,5 +42,17 @@ export default class HomeOrgReportController extends Controller {
     return this.model?.lastHarvestingDate.isFinished
       ? this.model?.lastHarvestingDate.value
       : [];
+  }
+
+  get lokaalBeslistUrl() {
+    if (ENV.lokaalBeslistUrl !== '{{LOKAALBESLIST_URL}}') {
+      return ENV.lokaalBeslistUrl;
+    }
+    if (ENV.environment === 'test') {
+      return 'http://localhost:4200/';
+    } else if (ENV.environment === 'development') {
+      return 'https://dev.lokaalbeslist.lblod.info/';
+    }
+    return 'https://lokaalbeslist.vlaanderen.be/';
   }
 }

@@ -11,7 +11,7 @@ export default helper(function DateFormat([date, format = 'DD-MM-YYYY']: [
     const month = newDate.toLocaleDateString('nl-BE', { month: '2-digit' });
     const year = newDate.getFullYear();
 
-    if (format === 'YYY-MM-DD') {
+    if (format === 'YYYY-MM-DD') {
       return `${year}-${month}-${day}`;
     }
     return `${day}-${month}-${year}`;
