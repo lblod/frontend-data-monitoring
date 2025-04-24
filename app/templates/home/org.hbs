@@ -60,30 +60,41 @@
           class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
         >
           <p class="au-u-medium">Burgemeester</p>
-          <p class="au-u-h3 au-u-bold">{{format-number
-              this.data.amountOfBurgemeesterDecisions
-              0
-            }}</p>
+          <p class="au-u-h3 au-u-bold">
+            {{#if this.isLoading}}
+              <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+            {{else}}
+              {{format-number this.data.amountOfBurgemeesterDecisions 0}}
+            {{/if}}
+          </p>
         </article>
 
         <article
           class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
         >
           <p class="au-u-medium">College van burgemeester en schepenen</p>
-          <p class="au-u-h3 au-u-bold">{{format-number
-              this.data.amountOfCollegeVanBurgemeesterEnSchepenenDecisions
-              0
-            }}</p>
+          <p class="au-u-h3 au-u-bold">
+            {{#if this.isLoading}}
+              <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+            {{else}}
+              {{format-number
+                this.data.amountOfCollegeVanBurgemeesterEnSchepenenDecisions
+                0
+              }}
+            {{/if}}</p>
         </article>
 
         <article
           class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
         >
           <p class="au-u-medium">Gemeenteraad</p>
-          <p class="au-u-h3 au-u-bold">{{format-number
-              this.data.amountOfGemeenteraadDecisions
-              0
-            }}</p>
+          <p class="au-u-h3 au-u-bold">
+            {{#if this.isLoading}}
+              <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
+            {{else}}
+              {{format-number this.data.amountOfGemeenteraadDecisions 0}}
+            {{/if}}
+          </p>
         </article>
       </div>
       <section>
