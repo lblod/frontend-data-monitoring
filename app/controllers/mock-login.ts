@@ -43,6 +43,9 @@ export default class MockLoginController extends Controller {
     if (this.gemeente) {
       filter['user'] = { groups: this.gemeente };
     }
+    filter['user'] = {
+      'first-name': 'Gemeente'
+    };
     const accounts = await this.store.query('account', {
       include: 'user,user.groups',
       filter: filter,
