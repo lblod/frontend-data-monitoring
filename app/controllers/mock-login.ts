@@ -40,12 +40,18 @@ export default class MockLoginController extends Controller {
     const filter: Record<string, string | object> = {
       provider: 'https://github.com/lblod/mock-login-service'
     };
+
     if (this.gemeente) {
-      filter['user'] = { groups: this.gemeente };
+      filter['user'] = {
+        'family-name': this.gemeente,
+        ':exact:first-name': 'Gemeente'
+      };
+    } else {
+      filter['user'] = {
+        ':exact:first-name': 'Gemeente'
+      };
     }
-    filter['user'] = {
-      'first-name': 'Gemeente'
-    };
+
     const accounts = await this.store.query('account', {
       include: 'user,user.groups',
       filter: filter,

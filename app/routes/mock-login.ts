@@ -40,10 +40,17 @@ export default class MockLoginRoute extends Route<
     const filter: Record<string, string | object> = {
       provider: 'https://github.com/lblod/mock-login-service'
     };
-    if (params.gemeente) filter['user'] = { groups: params.gemeente };
-    filter['user'] = {
-      'first-name': 'Gemeente'
-    };
+
+    if (params.gemeente) {
+      filter['user'] = {
+        groups: params.gemeente,
+        ':exact:first-name': 'Gemeente'
+      };
+    } else {
+      filter['user'] = {
+        ':exact:first-name': 'Gemeente'
+      };
+    }
     try {
       const accounts = await this.store.query('account', {
         include: 'user,user.groups',
