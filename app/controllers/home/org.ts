@@ -27,6 +27,31 @@ export default class HomeOrgReportController extends Controller {
     this.hasFilter = false;
   }
 
+  get pillSkin(): string {
+    const harvestDate = this.lastHarvestingDate;
+
+    if (!(harvestDate instanceof Date)) {
+      return 'default';
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    harvestDate.setHours(0, 0, 0, 0);
+
+    const diffInMs = today.getTime() - harvestDate.getTime();
+    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
+
+    if (diffInDays >= 2) {
+      return 'warning';
+    }
+
+    if (diffInDays >= 7) {
+      return 'error';
+    }
+
+    return 'default';
+  }
+
   get isLoading() {
     return this.model?.data.isRunning;
   }

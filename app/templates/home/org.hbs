@@ -33,7 +33,7 @@
           De data voor de monitoringstool wordt verzameld uit de door lokale
           overheden gepubliceerde datasets.
         </p>
-        <AuPill @skin="default" @icon="clock-rewind">Laatste harvesting
+        <AuPill @skin={{this.pillSkin}} @icon="clock-rewind">Laatste harvesting
           {{#if this.lastHarvestingDateIsLoading}}
             aan het laden..
           {{else}}
