@@ -41,15 +41,11 @@ export default class HomeOrgReportController extends Controller {
     const diffInMs = today.getTime() - harvestDate.getTime();
     const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
 
-    if (diffInDays >= 7) {
+    if (diffInDays >= 2) {
       return 'error';
     }
 
-    if (diffInDays >= 2) {
-      return 'warning';
-    }
-
-    return 'default';
+    return 'success';
   }
 
   get isLoading() {
