@@ -22,5 +22,6 @@ export const uriToResultKeyMap: Record<string, keyof CountResult> = {
     'amountOfPublicAgendaItemsWithDescription',
   'http://data.vlaanderen.be/ns/besluit#Besluit': 'amountOfPublicDecisions',
   'http://data.vlaanderen.be/ns/besluit#AgendapuntDuplicates':
-    'amountOfDuplicateAgendaItems'
+    'amountOfDuplicateAgendaItems',
+  'http://data.vlaanderen.be/ns/besluit#Stemming': 'amountOfPublicVotes'
 };
