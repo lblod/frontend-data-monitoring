@@ -54,238 +54,31 @@
         </span>
       </section>
       <div
-        class="au-u-flex au-u-1-1 au-u-flex--between au-u-flex--spaced au-u-padding-top au-u-padding-bottom"
+        class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-margin-top-small"
       >
-        <article
-          class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
-        >
-          <p class="au-u-medium">Burgemeester</p>
-          <p class="au-u-h3 au-u-bold">
-            {{#if this.isLoading}}
-              <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-            {{else}}
-              {{format-number this.data.amountOfBurgemeesterDecisions 0}}
-            {{/if}}
-          </p>
-        </article>
-
-        <article
-          class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
-        >
-          <p class="au-u-medium">College van burgemeester en schepenen</p>
-          <p class="au-u-h3 au-u-bold">
-            {{#if this.isLoading}}
-              <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-            {{else}}
-              {{format-number
-                this.data.amountOfCollegeVanBurgemeesterEnSchepenenDecisions
-                0
-              }}
-            {{/if}}</p>
-        </article>
-
-        <article
-          class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--between au-u-1-1"
-        >
-          <p class="au-u-medium">Gemeenteraad</p>
-          <p class="au-u-h3 au-u-bold">
-            {{#if this.isLoading}}
-              <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-            {{else}}
-              {{format-number this.data.amountOfGemeenteraadDecisions 0}}
-            {{/if}}
-          </p>
-        </article>
+        <AuHeading @level="4" @skin="4">Publieke statistieken</AuHeading>
+        <AuToggleSwitch
+          @identifier="'toggle-list-grid'"
+          @name="'view-toggle'"
+          @checked={{this.checked}}
+          @onChange={{this.handleToggle}}
+        >Lijstweergave</AuToggleSwitch>
       </div>
-      <section>
-        <AuHeading @level="5" @skin="5">Publieke statistieken</AuHeading>
-        <div class="au-u-1-1 au-o-grid au-o-grid--tiny au-u-padding-top-small">
-
-          {{! Sessions }}
-          <article
-            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
-          >
-            <span class="au-u-flex au-u-flex--column">
-              <p class="au-u-medium">Aantal gepubliceerde zittingen
-                <AuLinkExternal
-                  href="{{this.lokaalBeslistUrl}}zittingen?gemeentes={{this.currentSession.group.name}}"
-                  class="au-u-h6 au-u-margin-left-tiny"
-                >Bekijk zittingen</AuLinkExternal>
-              </p>
-              <p class="au-u-h2 au-u-medium">
-                {{#if this.isLoading}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{format-number this.data.amountOfPublicSessions 0}}
-                {{/if}}
-              </p>
-            </span>
-            <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
-              <p class="au-u-medium">Eerste gepubliceerde zitting
-                <AuLinkExternal
-                  href="{{this.lokaalBeslistUrl}}zittingen?gemeentes={{this.currentSession.group.name}}&begin={{date-format
-                    this.model.sessionTimestamps.value.firstSession
-                    'YYYY-MM-DD'
-                  }}&datumsortering=desc&eind={{date-format
-                    this.model.sessionTimestamps.value.firstSession
-                    'YYYY-MM-DD'
-                  }}"
-                  class="au-u-h6 au-u-margin-left-tiny"
-                >Bekijk zitting</AuLinkExternal>
-              </p>
-              <p class="au-u-h4">
-                {{#if this.model.sessionTimestamps.isRunning}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{#if this.model.sessionTimestamps.value.firstSession}}
-                    {{date-format
-                      this.model.sessionTimestamps.value.firstSession
-                    }}
-                  {{else}}
-                    is niet opgegeven.
-                  {{/if}}
-                {{/if}}
-              </p>
-            </span>
-            <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
-              <p class="au-u-medium">Laatste gepubliceerde zitting
-                <AuLinkExternal
-                  href="{{this.lokaalBeslistUrl}}zittingen?gemeentes={{this.currentSession.group.name}}&begin={{date-format
-                    this.model.sessionTimestamps.value.lastSession
-                    'YYYY-MM-DD'
-                  }}&datumsortering=desc&eind={{date-format
-                    this.model.sessionTimestamps.value.lastSession
-                    'YYYY-MM-DD'
-                  }}"
-                  class="au-u-h6 au-u-margin-left-tiny"
-                >Bekijk zitting</AuLinkExternal>
-              </p>
-              <p class="au-u-h4">
-                {{#if this.model.sessionTimestamps.isRunning}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{#if this.model.sessionTimestamps.value.lastSession}}
-                    {{date-format
-                      this.model.sessionTimestamps.value.lastSession
-                    }}
-                  {{else}}
-                    is niet opgegeven.
-                  {{/if}}
-                {{/if}}
-              </p>
-            </span>
-          </article>
-
-          {{! Agenda items }}
-          <article
-            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
-          >
-            <span class="au-u-flex au-u-flex--column">
-              <p class="au-u-medium">Aantal gepubliceerde agendapunten
-                <AuLinkExternal
-                  href="{{this.lokaalBeslistUrl}}agendapunten?gemeentes={{this.currentSession.group.name}}"
-                  class="au-u-h6 au-u-margin-left-tiny"
-                >Bekijk agendapunten</AuLinkExternal></p>
-              <p class="au-u-h2 au-u-medium">
-                {{#if this.isLoading}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{format-number this.data.amountOfPublicAgendaItems 0}}
-                {{/if}}
-              </p>
-            </span>
-            <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
-              <p class="au-u-medium">Aantal agendapunten zonder titels
-                <AuLinkExternal
-                  href="{{this.lokaalBeslistUrl}}agendapunten?gemeentes={{this.currentSession.group.name}}&trefwoord=-title*"
-                  class="au-u-h6 au-u-margin-left-tiny"
-                >Bekijk agendapunten</AuLinkExternal>
-              </p>
-              <p class="au-u-h2 au-u-medium">
-                {{#if this.isLoading}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{format-number
-                    this.data.amountOfPublicAgendaItemsWithTitle
-                    0
-                  }}
-                {{/if}}
-              </p>
-            </span>
-            <span class="au-u-flex au-u-flex--column au-u-margin-top-small">
-              <p class="au-u-medium">Aantal agendapunten zonder beschrijving
-                <AuLinkExternal
-                  href="{{this.lokaalBeslistUrl}}agendapunten?gemeentes={{this.currentSession.group.name}}&trefwoord=-description*"
-                  class="au-u-h6 au-u-margin-left-tiny"
-                >Bekijk agendapunten</AuLinkExternal></p>
-
-              <span class="au-u-h2 au-u-medium black">
-
-                {{#if this.isLoading}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{format-number
-                    this.data.amountOfPublicAgendaItemsWithDescription
-                    0
-                  }}
-                {{/if}}
-              </span>
-            </span>
-          </article>
-
-          {{! Decisions }}
-          <article
-            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
-          >
-            <span class="au-u-flex au-u-flex--column">
-              <p class="au-u-medium">Aantal gepubliceerde besluiten</p>
-              <p class="au-u-h2 au-u-medium">
-                {{#if this.isLoading}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{format-number this.data.amountOfPublicDecisions 0}}
-                {{/if}}
-              </p>
-            </span>
-          </article>
-
-          {{! Votes }}
-          <article
-            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
-          >
-            <span class="au-u-flex au-u-flex--column">
-              <p class="au-u-medium">Aantal gepubliceerde stemmingen</p>
-              <p class="au-u-h2 au-u-medium">
-                {{#if this.isLoading}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{format-number this.data.amountOfPublicVotes 0}}
-                {{/if}}
-              </p>
-            </span>
-          </article>
-
-          {{! Duplicate agendaitems with the same uri }}
-          <article
-            class="au-u-background-gray-100 au-u-padding-tiny au-u-flex au-u-flex--column au-o-grid__item"
-          >
-            <span class="au-u-flex au-u-flex--column">
-              <p class="au-u-medium">Aantal dubbele agendapunten
-                <AuLinkExternal
-                  href="{{this.lokaalBeslistUrl}}agendapunten?gemeentes={{this.currentSession.group.name}}"
-                  class="au-u-h6 au-u-margin-left-tiny"
-                >Bekijk agendapunten</AuLinkExternal></p>
-              <p class="au-u-h2 au-u-medium">
-                {{#if this.isLoading}}
-                  <AuLoader @hideMessage={{true}}>Aan het laden</AuLoader>
-                {{else}}
-                  {{format-number this.data.amountOfDuplicateAgendaItems 0}}
-                {{/if}}
-              </p>
-            </span>
-          </article>
-        </div>
-      </section>
+      {{#if this.checked}}
+        <ListView
+          @data={{this.data}}
+          @isLoading={{this.isLoading}}
+          @lokaalBeslistUrl={{this.lokaalBeslistUrl}}
+        />
+      {{else}}
+        <GridView
+          @model={{this.model}}
+          @currentSession={{this.currentSession}}
+          @data={{this.data}}
+          @isLoading={{this.isLoading}}
+          @lokaalBeslistUrl={{this.lokaalBeslistUrl}}
+        />
+      {{/if}}
 
     </AuContent>
 

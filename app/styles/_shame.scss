@@ -337,3 +337,34 @@ img {
 #page-not-found .au-o-grid {
   height: 100%;
 }
+
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+  cursor: pointer;
+}
+
+.custom-tooltip {
+  background-color: #333;
+  color: white;
+  font-size: 0.85rem;
+  border-radius: 4px;
+  padding: 5px 8px;
+}
+
+.no-link {
+  text-decoration: none;
+  color: inherit;
+}
+
+.disabled-link {
+  text-decoration: none;
+  color: var(--au-gray-500);
+  cursor: not-allowed;
+  pointer-events: none;
+
+  :hover {
+    text-decoration: none;
+    color: var(--au-gray-500);
+  }
+}
