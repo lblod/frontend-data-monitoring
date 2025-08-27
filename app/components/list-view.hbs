@@ -1,0 +1,62 @@
+<AuDataTable
+  @content={{@data}}
+  @fields="type label value url"
+  @noDataMessage="Geen gegevens gevonden"
+  @sort={{this.sort}}
+  @isLoading={{@isLoading}}
+  as |t|
+>
+  <t.content as |c|>
+    <c.header>
+      <AuDataTableThSortable
+        @field="type"
+        @currentSorting={{this.sort}}
+        @label="Type publicatie"
+        @class="data-table__header-title"
+      />
+      <AuDataTableThSortable
+        @field="label"
+        @currentSorting={{this.sort}}
+        @label="Label"
+        @class="data-table__header-title"
+      />
+      <AuDataTableThSortable
+        @field="value"
+        @currentSorting={{this.sort}}
+        @label="Waarde"
+        @class="data-table__header-title"
+      />
+      <th></th>
+    </c.header>
+    <c.body as |row|>
+      <td>{{row.type}}</td>
+      <td>
+        <div class="au-u-flex au-u-flex--row au-u-flex--vertical-center">
+          {{row.label}}
+          {{#if row.tooltip}}
+            <div class="tooltip-wrapper au-u-flex au-u-margin-left-tiny">
+              <AuIcon @icon="circle-question" @size="large" />
+              <EmberTooltip @text={{row.tooltip}} @side="top" />
+            </div>
+          {{/if}}
+        </div>
+      </td>
+      <td>
+        {{#if (eq row.valueType "number")}}
+          {{format-number row.value 0}}
+        {{else if (eq row.valueType "date")}}
+          {{date-format row.value}}
+        {{else}}
+          {{row.value}}
+        {{/if}}
+      </td>
+      <td><AuLinkExternal
+          @disabled={{not row.url}}
+          href={{row.url}}
+          @icon="eye"
+          class="{{unless row.url 'disabled-link'}}"
+        >Bekijk</AuLinkExternal>
+      </td>
+    </c.body>
+  </t.content>
+</AuDataTable>

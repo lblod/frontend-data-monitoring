@@ -22,9 +22,24 @@ export default class HomeOrgReportController extends Controller {
   };
 
   @tracked hasFilter = false;
+  @tracked checked = false;
 
+  constructor(...args: any[]) {
+    super(...args);
+
+    const saved = localStorage.getItem('view-toggle');
+    if (saved !== null) {
+      this.checked = saved === 'true';
+    }
+  }
   @action hideFilter() {
     this.hasFilter = false;
+  }
+
+  @action
+  handleToggle(checked: boolean) {
+    localStorage.setItem('view-toggle', String(checked));
+    this.checked = checked;
   }
 
   get pillSkin(): string {
@@ -63,17 +78,5 @@ export default class HomeOrgReportController extends Controller {
     return this.model?.lastHarvestingDate.isFinished
       ? this.model?.lastHarvestingDate.value
       : [];
-  }
-
-  get lokaalBeslistUrl() {
-    if (ENV.lokaalBeslistUrl !== '{{LOKAALBESLIST_URL}}') {
-      return ENV.lokaalBeslistUrl;
-    }
-    if (ENV.environment === 'test') {
-      return 'http://localhost:4200/';
-    } else if (ENV.environment === 'development') {
-      return 'https://dev.lokaalbeslist.lblod.info/';
-    }
-    return 'https://lokaalbeslist.vlaanderen.be/';
   }
 }
