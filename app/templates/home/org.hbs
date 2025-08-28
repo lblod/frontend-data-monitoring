@@ -3,7 +3,7 @@
     id="filtercontent"
     class="c-interface__content au-u-flex au-u-flex--column"
   >
-    <AuContent class="au-o-flow au-o-flow--small au-u-padding">
+    <AuContent class="au-o-flow au-o-flow--small">
       <section class="au-u-flex au-u-flex--between">
         <AuHeading
           @level="1"
@@ -46,15 +46,8 @@
           {{/if}}
         </AuPill>
       </section>
-      <section class="au-u-text-right">
-        <span
-          class="au-u-flex au-u-flex--column au-u-text-right au-u-flex--end"
-        >
-          <ReportWrongData />
-        </span>
-      </section>
       <div
-        class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-margin-top-small"
+        class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-padding-top"
       >
         <AuHeading @level="4" @skin="4">Publieke statistieken</AuHeading>
         <AuToggleSwitch
@@ -64,6 +57,7 @@
           @onChange={{this.handleToggle}}
         >Lijstweergave</AuToggleSwitch>
       </div>
+
       {{#if this.checked}}
         <ListView
           @data={{this.data}}
@@ -99,14 +93,21 @@
         Terug
       </a>
     </div>
-    <div class="c-interface__sidebar-main">
-      <h3 class="au-u-h4 au-u-medium">Filters</h3>
-      <Filters::DateRangeFilter
-        @startQueryParam="begin"
-        @endQueryParam="eind"
-        @start={{this.plannedStartMin}}
-        @end={{this.plannedStartMax}}
-      />
+    <div
+      class="au-u-flex au-u-flex--column au-u-flex--between au-u-flex--grow au-u-height-full"
+    >
+      <div class="c-interface__sidebar-main">
+        <h3 class="au-u-h4 au-u-medium">Filters</h3>
+        <Filters::DateRangeFilter
+          @startQueryParam="begin"
+          @endQueryParam="eind"
+          @start={{this.plannedStartMin}}
+          @end={{this.plannedStartMax}}
+        />
+      </div>
+      <div class="c-interface__sidebar-footer">
+        <ReportWrongData />
+      </div>
     </div>
     <div class="c-interface__sidebar-submit-buttons">
       <AuButton @skin="primary" @width="block" {{on "click" this.hideFilter}}>
