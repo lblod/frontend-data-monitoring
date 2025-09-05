@@ -129,11 +129,6 @@ export default class OrgReportRoute extends Route {
             }
           });
 
-        // If there’s no data, just return empty list
-        if (adminUnitCountReports.length === 0) {
-          return [];
-        }
-
         // Aggregate counts
         for (const adminUnitCountReport of adminUnitCountReports.slice()) {
           const governingBodyCountReports: ArrayProxy<GoverningBodyCountReportModel> =
@@ -184,13 +179,13 @@ export default class OrgReportRoute extends Route {
           {
             type: 'Zittingen',
             label: 'Eerste gepubliceerde zitting',
-            value: sessionTimestamps.firstSession ?? 'Niet opgegeven',
+            value: sessionTimestamps?.firstSession ?? 'Niet opgegeven',
             valueType: 'date'
           },
           {
             type: 'Zittingen',
             label: 'Laatste gepubliceerde zitting',
-            value: sessionTimestamps.lastSession ?? 'Niet opgegeven',
+            value: sessionTimestamps?.lastSession ?? 'Niet opgegeven',
             valueType: 'date'
           },
           {
