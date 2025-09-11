@@ -79,6 +79,14 @@ export default class OrgReportRoute extends Route {
     };
   }
 
+  getDecisions = task({ drop: true }, async () => {
+    const decisions = await this.store.query('decision-count-report', {
+      page: { size: 1000 },
+      sort: '-day'
+    });
+    return decisions;
+  });
+
   getLastHarvestingDate = task({ drop: true }, async () => {
     const lastHarvestingExecutionRecord = await this.store.query(
       'last-harvesting-execution-record',
@@ -135,7 +143,6 @@ export default class OrgReportRoute extends Route {
             await adminUnitCountReport.governingBodyCountReport;
 
           for (const governingBodyCountReport of governingBodyCountReports.slice()) {
-            const classificationLabel = governingBodyCountReport.classLabel;
             const publicationCountReports: ArrayProxy<PublicationCountReportModel> =
               await governingBodyCountReport.publicationCountReport;
 
@@ -146,28 +153,27 @@ export default class OrgReportRoute extends Route {
               if (resultKey) {
                 const count = report.get('count') ?? 0;
                 countResult[resultKey] += count;
-
-                if (
-                  uriToResultKeyMap[targetClass] === 'amountOfPublicDecisions'
-                ) {
-                  switch (classificationLabel) {
-                    case ClassificationLabel.Burgemeester:
-                      countResult.amountOfBurgemeesterDecisions += count;
-                      break;
-                    case ClassificationLabel.Gemeenteraad:
-                      countResult.amountOfGemeenteraadDecisions += count;
-                      break;
-                    case ClassificationLabel.CollegeVanBurgemeesterEnSchepenen:
-                      countResult.amountOfCollegeVanBurgemeesterEnSchepenenDecisions +=
-                        count;
-                      break;
-                  }
-                }
               }
             });
           }
         }
-
+        const decisions = await this.getDecisions.perform();
+        countResult.amountOfBurgemeesterDecisions = decisions.reduce(
+          (sum, d) => (d.classLabel === 'Burgemeester' ? sum + d.count : sum),
+          0
+        );
+        countResult.amountOfGemeenteraadDecisions = decisions.reduce(
+          (sum, d) => (d.classLabel === 'Gemeenteraad' ? sum + d.count : sum),
+          0
+        );
+        countResult.amountOfCollegeVanBurgemeesterEnSchepenenDecisions =
+          decisions.reduce(
+            (sum, d) =>
+              d.classLabel === 'College van Burgemeester en Schepenen'
+                ? sum + d.count
+                : sum,
+            0
+          );
         const result: ListData = [
           {
             type: 'Zittingen',
