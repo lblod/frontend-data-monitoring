@@ -41,17 +41,16 @@ export default class MockLoginController extends Controller {
       provider: 'https://github.com/lblod/mock-login-service'
     };
 
-    if (this.gemeente) {
-      filter['user'] = {
-        'family-name': this.gemeente,
-        ':exact:first-name': 'Gemeente'
-      };
-    } else {
-      filter['user'] = {
-        ':exact:first-name': 'Gemeente'
-      };
-    }
+    const classification = {
+      [':id:']: '5ab0e9b8a3b2ca7c5e000001,5ab0e9b8a3b2ca7c5e000000' // Gemeente and Provincie
+    };
 
+    filter['user'] = {
+      groups: {
+        ...(this.gemeente && { name: this.gemeente }),
+        classification
+      }
+    };
     const accounts = await this.store.query('account', {
       include: 'user,user.groups',
       filter: filter,

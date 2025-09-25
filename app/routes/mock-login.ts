@@ -41,19 +41,19 @@ export default class MockLoginRoute extends Route<
       provider: 'https://github.com/lblod/mock-login-service'
     };
 
-    if (params.gemeente) {
-      filter['user'] = {
-        groups: params.gemeente,
-        ':exact:first-name': 'Gemeente'
-      };
-    } else {
-      filter['user'] = {
-        ':exact:first-name': 'Gemeente'
-      };
-    }
+    const classification = {
+      [':id:']: '5ab0e9b8a3b2ca7c5e000001,5ab0e9b8a3b2ca7c5e000000' // Gemeente and Provincie
+    };
+
+    filter['user'] = {
+      groups: {
+        ...(params.gemeente && { name: params.gemeente }),
+        classification
+      }
+    };
     try {
       const accounts = await this.store.query('account', {
-        include: 'user,user.groups',
+        include: 'user,user.groups.classification',
         filter: filter,
         page: { size: 10, number: params.page },
         sort: 'user.family-name'
