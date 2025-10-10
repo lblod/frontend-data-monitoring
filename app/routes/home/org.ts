@@ -34,14 +34,18 @@ export type dataResult = {
 enum ClassificationLabel {
   Burgemeester = 'Burgemeester',
   Gemeenteraad = 'Gemeenteraad',
-  CollegeVanBurgemeesterEnSchepenen = 'College van Burgemeester en Schepenen'
+  CollegeVanBurgemeesterEnSchepenen = 'College van Burgemeester en Schepenen',
+  ProvincieRaad = 'Provincieraad',
+  Deputatie = 'Deputatie',
+  Governeur = 'Gouverneur'
 }
+type ValueType = 'string' | 'number' | 'date';
 interface ListItem {
   type: string;
   label: string;
   value: number;
   url?: string;
-  valueType?: 'number' | 'string' | 'date';
+  valueType?: ValueType;
   tooltip?: string;
 }
 
@@ -71,16 +75,31 @@ export default class OrgReportRoute extends Route {
 
   async model(params: { begin: string; eind: string }): Promise<object> {
     const sessionTimestamps = await this.getSessionTimestamps.perform();
+    const formatDate = (date: Date | string | undefined, fallback: Date) =>
+      (date ? new Date(date) : fallback).toISOString().split('T')[0];
+
+    const startDate = params.begin ? new Date(params.begin) : new Date(0);
+    startDate.setDate(startDate.getDate() - 1);
+    const fromDate = formatDate(startDate, new Date(0));
+
+    const endDate = params.eind ? new Date(params.eind) : new Date();
+    endDate.setDate(endDate.getDate() + 1);
+    const toDate = formatDate(endDate, new Date());
+
     return {
       lastHarvestingDate: this.getLastHarvestingDate.perform(),
       sessionTimestamps,
-      data: this.getData.perform(params, sessionTimestamps),
+      data: this.getData.perform(params, sessionTimestamps, fromDate, toDate),
       maturityLevel: this.getMaturityLevel.perform()
     };
   }
 
-  getDecisions = task({ drop: true }, async () => {
+  getDecisions = task({ drop: true }, async (params, fromDate, toDate) => {
     const decisions = await this.store.query('decision-count-report', {
+      filter: {
+        ':gt:day': fromDate,
+        ':lt:day': toDate
+      },
       page: { size: 1000 },
       sort: '-day'
     });
@@ -101,16 +120,8 @@ export default class OrgReportRoute extends Route {
 
   getData = task(
     { drop: true },
-    async (params, sessionTimestamps): Promise<ListData> => {
-      const fromDate = params.begin
-        ? new Date(params.begin).toISOString().split('T')[0]
-        : new Date(0).toISOString().split('T')[0];
-
-      const toDate = params.eind
-        ? new Date(params.eind).toISOString().split('T')[0]
-        : new Date().toISOString().split('T')[0];
-
-      const countResult = {
+    async (params, sessionTimestamps, fromDate, toDate): Promise<ListData> => {
+      const initialCounts = {
         amountOfPublicSessions: 0,
         amountOfPublicAgendaItems: 0,
         amountOfPublicDecisions: 0,
@@ -120,60 +131,122 @@ export default class OrgReportRoute extends Route {
         amountOfBurgemeesterDecisions: 0,
         amountOfGemeenteraadDecisions: 0,
         amountOfCollegeVanBurgemeesterEnSchepenenDecisions: 0,
-        amountOfDuplicateAgendaItems: 0
+        amountOfDuplicateAgendaItems: 0,
+        amountOfProvincieraadDecisions: 0,
+        amountOfDeputatieDecisions: 0,
+        amountOfGouverneurDecisions: 0
       };
 
       try {
+        // --- Fetch and aggregate counts ---
         const adminUnitCountReports: ArrayProxy<AdminUnitCountReportModel> =
           await this.store.query('admin-unit-count-report', {
             include:
               'governing-body-count-report,governing-body-count-report.publication-count-report',
             sort: '-created-at',
             filter: {
-              'governing-body-count-report': {
-                ':gte:day': fromDate,
-                ':lte:day': toDate
-              }
+              ':gt:day': fromDate,
+              ':lt:day': toDate
             }
           });
 
-        // Aggregate counts
+        const countResult = { ...initialCounts };
+
         for (const adminUnitCountReport of adminUnitCountReports.slice()) {
-          const governingBodyCountReports: ArrayProxy<GoverningBodyCountReportModel> =
+          const governingBodyCountReports =
             await adminUnitCountReport.governingBodyCountReport;
 
           for (const governingBodyCountReport of governingBodyCountReports.slice()) {
-            const publicationCountReports: ArrayProxy<PublicationCountReportModel> =
+            const publicationCountReports =
               await governingBodyCountReport.publicationCountReport;
 
             publicationCountReports.forEach((report) => {
-              const targetClass = report.targetClass;
-              const resultKey = uriToResultKeyMap[targetClass];
-
-              if (resultKey) {
-                const count = report.get('count') ?? 0;
-                countResult[resultKey] += count;
+              const key = uriToResultKeyMap[report.targetClass];
+              if (key) {
+                countResult[key] += report.get('count') ?? 0;
               }
             });
           }
         }
-        const decisions = await this.getDecisions.perform();
-        countResult.amountOfBurgemeesterDecisions = decisions.reduce(
-          (sum, d) => (d.classLabel === 'Burgemeester' ? sum + d.count : sum),
-          0
+
+        // --- Aggregate decisions ---
+        const decisions = await this.getDecisions.perform(
+          params,
+          fromDate,
+          toDate
         );
-        countResult.amountOfGemeenteraadDecisions = decisions.reduce(
-          (sum, d) => (d.classLabel === 'Gemeenteraad' ? sum + d.count : sum),
-          0
-        );
-        countResult.amountOfCollegeVanBurgemeesterEnSchepenenDecisions =
+
+        const sumByClass = (label: ClassificationLabel) =>
           decisions.reduce(
-            (sum, d) =>
-              d.classLabel === 'College van Burgemeester en Schepenen'
-                ? sum + d.count
-                : sum,
+            (sum, d) => (d.classLabel === label ? sum + d.count : sum),
             0
           );
+
+        if (this.currentSession.groupClassification.label === 'Provincie') {
+          countResult.amountOfProvincieraadDecisions = sumByClass(
+            ClassificationLabel.ProvincieRaad
+          );
+          countResult.amountOfDeputatieDecisions = sumByClass(
+            ClassificationLabel.Deputatie
+          );
+          countResult.amountOfGouverneurDecisions = sumByClass(
+            ClassificationLabel.Governeur
+          );
+        } else {
+          countResult.amountOfBurgemeesterDecisions = sumByClass(
+            ClassificationLabel.Burgemeester
+          );
+          countResult.amountOfGemeenteraadDecisions = sumByClass(
+            ClassificationLabel.Gemeenteraad
+          );
+          countResult.amountOfCollegeVanBurgemeesterEnSchepenenDecisions =
+            sumByClass(ClassificationLabel.CollegeVanBurgemeesterEnSchepenen);
+        }
+
+        // --- Build result list ---
+        const conditionalItems: ListData =
+          this.currentSession.groupClassification.label === 'Provincie'
+            ? [
+                {
+                  type: 'Besluiten per orgaan',
+                  label: 'Provincieraad',
+                  value: countResult.amountOfProvincieraadDecisions,
+                  valueType: 'number'
+                },
+                {
+                  type: 'Besluiten per orgaan',
+                  label: 'Deputatie',
+                  value: countResult.amountOfDeputatieDecisions,
+                  valueType: 'number'
+                },
+                {
+                  type: 'Besluiten per orgaan',
+                  label: 'Gouverneur',
+                  value: countResult.amountOfGouverneurDecisions,
+                  valueType: 'number'
+                }
+              ]
+            : [
+                {
+                  type: 'Besluiten per orgaan',
+                  label: 'Burgemeester',
+                  value: countResult.amountOfBurgemeesterDecisions,
+                  valueType: 'number'
+                },
+                {
+                  type: 'Besluiten per orgaan',
+                  label: 'Gemeenteraad',
+                  value: countResult.amountOfGemeenteraadDecisions,
+                  valueType: 'number'
+                },
+                {
+                  type: 'Besluiten per orgaan',
+                  label: 'College van burgemeester en schepenen',
+                  value:
+                    countResult.amountOfCollegeVanBurgemeesterEnSchepenenDecisions,
+                  valueType: 'number'
+                }
+              ];
         const result: ListData = [
           {
             type: 'Zittingen',
@@ -206,25 +279,7 @@ export default class OrgReportRoute extends Route {
             value: countResult.amountOfPublicDecisions,
             valueType: 'number'
           },
-          {
-            type: 'Besluiten per orgaan',
-            label: 'Burgemeester',
-            value: countResult.amountOfBurgemeesterDecisions,
-            valueType: 'number'
-          },
-          {
-            type: 'Besluiten per orgaan',
-            label: 'Gemeenteraad',
-            value: countResult.amountOfGemeenteraadDecisions,
-            valueType: 'number'
-          },
-          {
-            type: 'Besluiten per orgaan',
-            label: 'College van burgemeester en schepenen',
-            value:
-              countResult.amountOfCollegeVanBurgemeesterEnSchepenenDecisions,
-            valueType: 'number'
-          },
+          ...conditionalItems,
           {
             type: 'Agendapunten',
             label: 'Aantal gepubliceerde agendapunten',
@@ -256,12 +311,10 @@ export default class OrgReportRoute extends Route {
           }
         ];
 
-        (result as ListData).meta = {
+        // attach metadata
+        result.meta = {
           count: result.length,
-          pagination: {
-            first: { number: 0 },
-            last: { number: 0 }
-          }
+          pagination: { first: { number: 0 }, last: { number: 0 } }
         };
 
         return result;
