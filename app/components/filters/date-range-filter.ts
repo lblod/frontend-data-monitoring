@@ -22,6 +22,8 @@ interface Signature {
     endQueryParam: string;
     start?: ISODateString;
     end?: ISODateString;
+    startValue?: ISODateString | null;
+    endValue?: ISODateString | null;
   };
 }
 
@@ -105,10 +107,17 @@ export default class DateRangeFilterComponent extends Component<Signature> {
   constructor(owner: unknown, args: Signature['Args']) {
     super(owner, args);
 
-    const { start, end } = this.args;
-    this.start = start ? start : null;
-    this.end = end ? end : null;
+    const { startValue, endValue } = this.args;
+    this.start = startValue ? startValue : null;
+    this.end = endValue ? endValue : null;
     this.setInitialPreset();
+  }
+
+  @action
+  resetFilters() {
+    this.selectedPreset = null;
+    this.isChoosingPresets = true;
+    this.resetQueryParams();
   }
 
   @action handleSelectionChange(selectedPreset: Preset | null): void {
@@ -240,10 +249,10 @@ export default class DateRangeFilterComponent extends Component<Signature> {
   updateQueryParams(): void {
     this.router.transitionTo({
       queryParams: {
-        [this.args.startQueryParam || 'start']: !this.startDateError?.length
+        [this.args.startQueryParam || 'begin']: !this.startDateError?.length
           ? this.start
           : null,
-        [this.args.endQueryParam || 'end']: !this.endDateError?.length
+        [this.args.endQueryParam || 'eind']: !this.endDateError?.length
           ? this.end
           : null
       }

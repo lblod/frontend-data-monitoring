@@ -6,9 +6,11 @@ import { tracked } from '@glimmer/tracking';
 import { CountResult } from 'frontend-data-monitoring/routes/home/org';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
-import ENV from 'frontend-data-monitoring/config/environment';
 
 export default class HomeOrgReportController extends Controller {
+  queryParams = ['begin', 'eind'];
+  @tracked begin: string | null = null;
+  @tracked eind: string | null = null;
   @service declare loketSession: LoketSessionService;
   @service declare store: Store;
   @service declare currentSession: CurrentSessionService;

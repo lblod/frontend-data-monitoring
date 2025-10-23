@@ -5,8 +5,6 @@ import { inject as service } from '@ember/service';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import { task } from 'ember-concurrency';
 import AdminUnitCountReportModel from 'frontend-data-monitoring/models/admin-unit-count-report';
-import GoverningBodyCountReportModel from 'frontend-data-monitoring/models/governing-body-count-report';
-import ArrayProxy from '@ember/array/proxy';
 import PublicationCountReportModel from 'frontend-data-monitoring/models/publication-count-report';
 import ENV from 'frontend-data-monitoring/config/environment';
 import {
@@ -95,15 +93,41 @@ export default class OrgReportRoute extends Route {
   }
 
   getDecisions = task({ drop: true }, async (params, fromDate, toDate) => {
-    const decisions = await this.store.query('decision-count-report', {
-      filter: {
-        ':gt:day': fromDate,
-        ':lt:day': toDate
-      },
-      page: { size: 1000 },
-      sort: '-day'
-    });
-    return decisions;
+    if (!params.begin && !params.eind) {
+      const decisions = await this.store.query('decision-count-report', {
+        filter: {
+          day: new Date().toISOString().split('T')[0]
+        },
+        page: { size: 1000 },
+        sort: '-day'
+      });
+      return { decisions };
+    } else {
+      const formattedDate = (date: Date, operation: string) => {
+        const newDate = new Date(date);
+        if (operation === 'add') {
+          newDate.setDate(newDate.getDate() + 1);
+        } else if (operation === 'subtract') {
+          newDate.setDate(newDate.getDate() - 1);
+        }
+        return newDate.toISOString().split('T')[0];
+      };
+      const startDecisions = await this.store.query('decision-count-report', {
+        filter: {
+          day: formattedDate(fromDate, 'add')
+        },
+        page: { size: 1000 },
+        sort: '-day'
+      });
+      const endDecisions = await this.store.query('decision-count-report', {
+        filter: {
+          day: formattedDate(toDate, 'subtract')
+        },
+        page: { size: 1000 },
+        sort: '-day'
+      });
+      return { startDecisions, endDecisions };
+    }
   });
 
   getLastHarvestingDate = task({ drop: true }, async () => {
@@ -138,49 +162,100 @@ export default class OrgReportRoute extends Route {
       };
 
       try {
-        // --- Fetch and aggregate counts ---
-        const adminUnitCountReports: ArrayProxy<AdminUnitCountReportModel> =
-          await this.store.query('admin-unit-count-report', {
+        let newReport: AdminUnitCountReportModel | undefined = undefined;
+        if (params.begin) {
+          const newReports = await this.store.query('admin-unit-count-report', {
             include:
               'governing-body-count-report,governing-body-count-report.publication-count-report',
             sort: '-created-at',
             filter: {
-              ':gt:day': fromDate,
-              ':lt:day': toDate
-            }
+              ':gt:day': fromDate
+            },
+            page: { size: 1 }
           });
+          newReport = newReports.slice()[0];
+        }
+
+        const oldReports = await this.store.query('admin-unit-count-report', {
+          include:
+            'governing-body-count-report,governing-body-count-report.publication-count-report',
+          sort: '-created-at',
+          filter: {
+            ':lt:day': toDate
+          },
+          page: { size: 1 }
+        });
+        const oldReport = oldReports.slice()[0];
 
         const countResult = { ...initialCounts };
 
-        for (const adminUnitCountReport of adminUnitCountReports.slice()) {
+        if (oldReport) {
           const governingBodyCountReports =
-            await adminUnitCountReport.governingBodyCountReport;
+            await oldReport.governingBodyCountReport;
 
           for (const governingBodyCountReport of governingBodyCountReports.slice()) {
             const publicationCountReports =
               await governingBodyCountReport.publicationCountReport;
 
-            publicationCountReports.forEach((report) => {
-              const key = uriToResultKeyMap[report.targetClass];
-              if (key) {
-                countResult[key] += report.get('count') ?? 0;
+            publicationCountReports.forEach(
+              (report: PublicationCountReportModel) => {
+                const key = uriToResultKeyMap[report.targetClass];
+                if (key) {
+                  countResult[key] += report.get('count') ?? 0;
+                }
               }
-            });
+            );
+          }
+        }
+
+        if (newReport) {
+          const governingBodyCountReports =
+            await newReport.governingBodyCountReport;
+
+          for (const governingBodyCountReport of governingBodyCountReports.slice()) {
+            const publicationCountReports =
+              await governingBodyCountReport.publicationCountReport;
+
+            publicationCountReports.forEach(
+              (report: PublicationCountReportModel) => {
+                const key = uriToResultKeyMap[report.targetClass];
+                if (key) {
+                  const current = countResult[key] ?? 0;
+                  const subtract = report.get('count') ?? 0;
+                  countResult[key] = Math.max(0, current - subtract);
+                }
+              }
+            );
           }
         }
 
         // --- Aggregate decisions ---
-        const decisions = await this.getDecisions.perform(
-          params,
-          fromDate,
-          toDate
-        );
+        const { decisions, startDecisions, endDecisions } =
+          await this.getDecisions.perform(params, fromDate, toDate);
 
-        const sumByClass = (label: ClassificationLabel) =>
-          decisions.reduce(
-            (sum, d) => (d.classLabel === label ? sum + d.count : sum),
-            0
-          );
+        const sumByClass = (label: ClassificationLabel) => {
+          if (decisions) {
+            return (
+              decisions.reduce(
+                (sum, d) => (d.classLabel === label ? sum + d.count : sum),
+                0
+              ) || 0
+            );
+          } else {
+            const startSum =
+              startDecisions?.reduce(
+                (sum, d) => (d.classLabel === label ? sum + d.count : sum),
+                0
+              ) || 0;
+            const endSum =
+              endDecisions?.reduce(
+                (sum, d) => (d.classLabel === label ? sum + d.count : sum),
+                0
+              ) || 0;
+
+            return Math.max(0, endSum - startSum); // clamp to 0
+          }
+        };
 
         if (this.currentSession.groupClassification.label === 'Provincie') {
           countResult.amountOfProvincieraadDecisions = sumByClass(
