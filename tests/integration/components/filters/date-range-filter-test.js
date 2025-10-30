@@ -17,7 +17,9 @@ module('Integration | Component | filters/date-range-filter', function (hooks) {
   test('it displays presets by default', async function (assert) {
     assert
       .dom(this.element)
-      .hasText('Selecteer een periode Alle periodes Eigen periode kiezen');
+      .hasText(
+        'Selecteer een periode Alle periodes Eigen periode kiezen Herstel alle filters'
+      );
   });
 
   test('it switches between presets and custom date range when click the toggle button', async function (assert) {
@@ -56,8 +58,8 @@ module('Integration | Component | filters/date-range-filter', function (hooks) {
       assert.deepEqual(this.router.transitionTo.getCall(0).args, [
         {
           queryParams: {
-            end: null,
-            start: '2023-01-01'
+            eind: null,
+            begin: '2023-01-01'
           }
         }
       ]);
@@ -72,14 +74,14 @@ module('Integration | Component | filters/date-range-filter', function (hooks) {
       assert.true(this.router.transitionTo.calledTwice);
       assert.deepEqual(this.router.transitionTo.getCall(0).args[0], {
         queryParams: {
-          end: null,
-          start: '2023-01-01'
+          eind: null,
+          begin: '2023-01-01'
         }
       });
       assert.deepEqual(this.router.transitionTo.getCall(1).args[0], {
         queryParams: {
-          end: null,
-          start: null
+          eind: null,
+          begin: null
         }
       });
     });
@@ -138,8 +140,8 @@ module('Integration | Component | filters/date-range-filter', function (hooks) {
       assert.deepEqual(this.router.transitionTo.getCall(0).args, [
         {
           queryParams: {
-            end: null,
-            start: '2023-12-31'
+            eind: null,
+            begin: '2023-12-31'
           }
         }
       ]);
