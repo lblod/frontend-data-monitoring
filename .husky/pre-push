@@ -1,3 +1,0 @@
-echo "🚀 Running full test suite before push..."
-npm run test:all
-echo "✅ All tests passed! Proceeding with push..."
