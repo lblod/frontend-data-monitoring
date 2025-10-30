@@ -1,3 +1,3 @@
 echo "🚀 Running full test suite before push..."
-npm run lint
+npm run test:all
 echo "✅ All tests passed! Proceeding with push..."

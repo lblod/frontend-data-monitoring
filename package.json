@@ -31,10 +31,10 @@
     "prod": "ember serve --environment=production",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test",
+    "test:playwright": "start-server-and-test start:test http://localhost:4200 'npx playwright test'",
+    "test:all": "npm run test:playwright && npm run test:ember && npm run lint",
     "release": "release-it",
     "prepare": "husky",
-    "test:playwright": "start-server-and-test start:test http://localhost:4200 'npx playwright test'",
-    "test:all": "npm run test && npm run test:playwright",
     "start:test": "ember serve --environment=test --proxy=https://data-monitoring.andres-dev.s.redhost.be/ --secure-proxy=false --port=4200"
   },
   "devDependencies": {
