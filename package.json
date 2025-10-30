@@ -31,7 +31,11 @@
     "prod": "ember serve --environment=production",
     "test": "concurrently \"npm:lint\" \"npm:test:*\" --names \"lint,test:\"",
     "test:ember": "ember test",
-    "release": "release-it"
+    "release": "release-it",
+    "prepare": "husky",
+    "test:playwright": "start-server-and-test start:test http://localhost:4200 'npx playwright test'",
+    "test:all": "npm run test && npm run test:playwright",
+    "start:test": "ember serve --environment=test --proxy=https://data-monitoring.andres-dev.s.redhost.be/ --secure-proxy=false --port=4200"
   },
   "devDependencies": {
     "@appuniversum/ember-appuniversum": "^3.6.0",
@@ -119,6 +123,7 @@
     "eslint-plugin-n": "^15.7.0",
     "eslint-plugin-prettier": "^5.2.1",
     "eslint-plugin-qunit": "^7.3.4",
+    "husky": "^9.1.7",
     "loader.js": "^4.7.0",
     "pre-commit": "^1.2.2",
     "prettier": "^3.3.3",
@@ -127,6 +132,7 @@
     "release-it": "^15.11.0",
     "sass": "^1.57.1",
     "sinon": "^19.0.2",
+    "start-server-and-test": "^2.1.2",
     "stylelint": "^16.9.0",
     "stylelint-config-standard": "^36.0.1",
     "stylelint-config-standard-scss": "^13.1.0",
