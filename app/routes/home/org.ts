@@ -81,7 +81,6 @@ export default class OrgReportRoute extends Route {
     const fromDate = formatDate(startDate, new Date(0));
 
     const endDate = params.eind ? new Date(params.eind) : new Date();
-    endDate.setDate(endDate.getDate() + 1);
     const toDate = formatDate(endDate, new Date());
     const lastHarvestingDate = await this.getLastHarvestingDate.perform();
     return {
@@ -108,8 +107,6 @@ export default class OrgReportRoute extends Route {
           const date = lastHarvestingDate
             ? new Date(lastHarvestingDate)
             : new Date();
-
-          date.setDate(date.getDate() + 1);
           return date;
         }
 
