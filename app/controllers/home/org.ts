@@ -73,12 +73,7 @@ export default class HomeOrgReportController extends Controller {
     return this.model?.data.isFinished ? this.model?.data.value : [];
   }
 
-  get lastHarvestingDateIsLoading() {
-    return this.model?.lastHarvestingDate.isRunning;
-  }
   get lastHarvestingDate() {
-    return this.model?.lastHarvestingDate.isFinished
-      ? this.model?.lastHarvestingDate.value
-      : [];
+    return this.model?.lastHarvestingDate;
   }
 }

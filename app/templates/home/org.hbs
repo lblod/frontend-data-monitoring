@@ -34,15 +34,11 @@
           overheden gepubliceerde datasets.
         </p>
         <AuPill @skin={{this.pillSkin}} @icon="clock-rewind">Laatste harvesting
-          {{#if this.lastHarvestingDateIsLoading}}
-            aan het laden..
+          {{#if (date-format this.lastHarvestingDate)}}
+            op
+            {{date-format this.lastHarvestingDate}}
           {{else}}
-            {{#if (date-format this.lastHarvestingDate)}}
-              op
-              {{date-format this.lastHarvestingDate}}
-            {{else}}
-              is niet opgegeven.
-            {{/if}}
+            is niet opgegeven.
           {{/if}}
         </AuPill>
       </section>

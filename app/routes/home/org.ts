@@ -83,52 +83,57 @@ export default class OrgReportRoute extends Route {
     const endDate = params.eind ? new Date(params.eind) : new Date();
     endDate.setDate(endDate.getDate() + 1);
     const toDate = formatDate(endDate, new Date());
-
+    const lastHarvestingDate = await this.getLastHarvestingDate.perform();
     return {
-      lastHarvestingDate: this.getLastHarvestingDate.perform(),
+      lastHarvestingDate,
       sessionTimestamps,
-      data: this.getData.perform(params, sessionTimestamps, fromDate, toDate),
+      data: this.getData.perform(
+        params,
+        sessionTimestamps,
+        fromDate,
+        toDate,
+        lastHarvestingDate
+      ),
       maturityLevel: this.getMaturityLevel.perform()
     };
   }
 
-  getDecisions = task({ drop: true }, async (params, fromDate, toDate) => {
-    if (!params.begin && !params.eind) {
-      const decisions = await this.store.query('decision-count-report', {
-        filter: {
-          day: new Date().toISOString().split('T')[0]
-        },
-        page: { size: 1000 },
-        sort: '-day'
-      });
-      return { decisions };
-    } else {
-      const formattedDate = (date: Date, operation: string) => {
-        const newDate = new Date(date);
-        if (operation === 'add') {
-          newDate.setDate(newDate.getDate() + 1);
-        } else if (operation === 'subtract') {
-          newDate.setDate(newDate.getDate() - 1);
+  getDecisions = task(
+    { drop: true },
+    async (params, toDate, lastHarvestingDate) => {
+      const formatDay = (date: Date) => date.toLocaleDateString('en-CA');
+
+      const resolveDate = () => {
+        if (!params.begin && !params.eind) {
+          const date = lastHarvestingDate
+            ? new Date(lastHarvestingDate)
+            : new Date();
+
+          date.setDate(date.getDate() + 1);
+          return date;
         }
-        return newDate.toISOString().split('T')[0];
+
+        const to = new Date(toDate);
+
+        if (lastHarvestingDate) {
+          const last = new Date(lastHarvestingDate);
+          if (to > last) {
+            return last;
+          }
+        }
+
+        return to;
       };
-      const startDecisions = await this.store.query('decision-count-report', {
-        filter: {
-          day: formattedDate(fromDate, 'add')
-        },
+      const day = formatDay(resolveDate());
+      const decisions = await this.store.query('decision-count-report', {
+        filter: { day },
         page: { size: 1000 },
         sort: '-day'
       });
-      const endDecisions = await this.store.query('decision-count-report', {
-        filter: {
-          day: formattedDate(toDate, 'subtract')
-        },
-        page: { size: 1000 },
-        sort: '-day'
-      });
-      return { startDecisions, endDecisions };
+
+      return { decisions };
     }
-  });
+  );
 
   getLastHarvestingDate = task({ drop: true }, async () => {
     const lastHarvestingExecutionRecord = await this.store.query(
@@ -144,7 +149,13 @@ export default class OrgReportRoute extends Route {
 
   getData = task(
     { drop: true },
-    async (params, sessionTimestamps, fromDate, toDate): Promise<ListData> => {
+    async (
+      params,
+      sessionTimestamps,
+      fromDate,
+      toDate,
+      lastHarvestingDate
+    ): Promise<ListData> => {
       const initialCounts = {
         amountOfPublicSessions: 0,
         amountOfPublicAgendaItems: 0,
@@ -192,7 +203,6 @@ export default class OrgReportRoute extends Route {
         if (oldReport) {
           const governingBodyCountReports =
             await oldReport.governingBodyCountReport;
-
           for (const governingBodyCountReport of governingBodyCountReports.slice()) {
             const publicationCountReports =
               await governingBodyCountReport.publicationCountReport;
@@ -230,9 +240,11 @@ export default class OrgReportRoute extends Route {
         }
 
         // --- Aggregate decisions ---
-        const { decisions, startDecisions, endDecisions } =
-          await this.getDecisions.perform(params, fromDate, toDate);
-
+        const { decisions } = await this.getDecisions.perform(
+          params,
+          toDate,
+          lastHarvestingDate
+        );
         const sumByClass = (label: ClassificationLabel) => {
           if (decisions) {
             return (
@@ -241,20 +253,8 @@ export default class OrgReportRoute extends Route {
                 0
               ) || 0
             );
-          } else {
-            const startSum =
-              startDecisions?.reduce(
-                (sum, d) => (d.classLabel === label ? sum + d.count : sum),
-                0
-              ) || 0;
-            const endSum =
-              endDecisions?.reduce(
-                (sum, d) => (d.classLabel === label ? sum + d.count : sum),
-                0
-              ) || 0;
-
-            return Math.max(0, endSum - startSum); // clamp to 0
           }
+          return 0;
         };
 
         if (this.currentSession.groupClassification.label === 'Provincie') {
@@ -277,7 +277,6 @@ export default class OrgReportRoute extends Route {
           countResult.amountOfCollegeVanBurgemeesterEnSchepenenDecisions =
             sumByClass(ClassificationLabel.CollegeVanBurgemeesterEnSchepenen);
         }
-
         // --- Build result list ---
         const conditionalItems: ListData =
           this.currentSession.groupClassification.label === 'Provincie'
