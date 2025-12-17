@@ -9,6 +9,7 @@ import {
   endOfWeek as endOfWeekDateFns,
   endOfYear,
   formatISO,
+  startOfDay,
   startOfMonth,
   startOfWeek as startOfWeekDateFns,
   startOfYear,
@@ -28,12 +29,13 @@ interface Signature {
 }
 
 enum Preset {
-  ThisWeek = 'Deze week',
-  LastWeek = 'Vorige week',
-  ThisMonth = 'Deze maand',
-  LastMonth = 'Vorige maand',
-  ThisYear = 'Dit jaar',
-  LastYear = 'Vorig jaar'
+  Today = 'Vandaag',
+  ThisWeek = 'Begin van de week',
+  LastWeek = 'Begin van vorige week',
+  ThisMonth = 'Begin van deze maand',
+  LastMonth = 'Begin van vorige maand',
+  ThisYear = 'Begin van dit jaar',
+  LastYear = 'Begin van vorig jaar'
 }
 
 export default class DateRangeFilterComponent extends Component<Signature> {
@@ -51,6 +53,7 @@ export default class DateRangeFilterComponent extends Component<Signature> {
   @tracked startDateError?: string[];
 
   presets = [
+    Preset.Today,
     Preset.ThisWeek,
     Preset.LastWeek,
     Preset.ThisMonth,
@@ -63,29 +66,33 @@ export default class DateRangeFilterComponent extends Component<Signature> {
   get presetDateRanges() {
     const today = new Date();
     return {
+      [Preset.Today]: [
+        toIsoDateString(startOfDay(today)),
+        toIsoDateString(startOfDay(today))
+      ],
       [Preset.ThisWeek]: [
         toIsoDateString(startOfWeek(today)),
-        toIsoDateString(endOfWeek(today))
+        toIsoDateString(startOfWeek(today))
       ],
       [Preset.LastWeek]: [
         toIsoDateString(startOfWeek(sub(today, { weeks: 1 }))),
-        toIsoDateString(endOfWeek(sub(today, { weeks: 1 })))
+        toIsoDateString(startOfWeek(sub(today, { weeks: 1 })))
       ],
       [Preset.ThisMonth]: [
         toIsoDateString(startOfMonth(today)),
-        toIsoDateString(endOfMonth(today))
+        toIsoDateString(startOfMonth(today))
       ],
       [Preset.LastMonth]: [
         toIsoDateString(startOfMonth(sub(today, { months: 1 }))),
-        toIsoDateString(endOfMonth(sub(today, { months: 1 })))
+        toIsoDateString(startOfMonth(sub(today, { months: 1 })))
       ],
       [Preset.ThisYear]: [
         toIsoDateString(startOfYear(today)),
-        toIsoDateString(endOfYear(today))
+        toIsoDateString(startOfYear(today))
       ],
       [Preset.LastYear]: [
         toIsoDateString(startOfYear(sub(today, { years: 1 }))),
-        toIsoDateString(endOfYear(sub(today, { years: 1 })))
+        toIsoDateString(startOfYear(sub(today, { years: 1 })))
       ]
     };
   }
@@ -249,10 +256,7 @@ export default class DateRangeFilterComponent extends Component<Signature> {
   updateQueryParams(): void {
     this.router.transitionTo({
       queryParams: {
-        [this.args.startQueryParam || 'begin']: !this.startDateError?.length
-          ? this.start
-          : null,
-        [this.args.endQueryParam || 'eind']: !this.endDateError?.length
+        [this.args.endQueryParam || 'datum']: !this.endDateError?.length
           ? this.end
           : null
       }

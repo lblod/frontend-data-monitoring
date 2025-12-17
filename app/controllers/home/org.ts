@@ -8,9 +8,8 @@ import CurrentSessionService from 'frontend-data-monitoring/services/current-ses
 import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 
 export default class HomeOrgReportController extends Controller {
-  queryParams = ['begin', 'eind'];
-  @tracked begin: string | null = null;
-  @tracked eind: string | null = null;
+  queryParams = ['datum'];
+  @tracked datum: string | null = null;
   @service declare loketSession: LoketSessionService;
   @service declare store: Store;
   @service declare currentSession: CurrentSessionService;

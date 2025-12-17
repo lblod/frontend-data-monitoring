@@ -63,23 +63,16 @@ export default class OrgReportRoute extends Route {
   @service declare currentSession: CurrentSessionService;
   @tracked listData: ListData = [];
   queryParams = {
-    begin: {
-      refreshModel: true
-    },
-    eind: {
+    datum: {
       refreshModel: true
     }
   };
 
-  async model(params: { begin: string; eind: string }): Promise<object> {
+  async model(params: { datum: string }): Promise<object> {
     const formatDate = (date: Date | string | undefined, fallback: Date) =>
       (date ? new Date(date) : fallback).toISOString().split('T')[0];
 
-    const startDate = params.begin ? new Date(params.begin) : new Date(0);
-    startDate.setDate(startDate.getDate() - 1);
-    const fromDate = formatDate(startDate, new Date(0));
-
-    const endDate = params.eind ? new Date(params.eind) : null;
+    const endDate = params.datum ? new Date(params.datum) : null;
     const lastHarvestingDate = await this.getLastHarvestingDate.perform();
     const toDate = formatDate(endDate ?? lastHarvestingDate, new Date());
     const sessionTimestamps = await this.getSessionTimestamps.perform(toDate);
@@ -89,7 +82,6 @@ export default class OrgReportRoute extends Route {
       data: this.getData.perform(
         params,
         sessionTimestamps,
-        fromDate,
         toDate,
         lastHarvestingDate
       ),
@@ -103,7 +95,7 @@ export default class OrgReportRoute extends Route {
       const formatDay = (date: Date) => date.toLocaleDateString('en-CA');
 
       const resolveDate = () => {
-        if (!params.begin && !params.eind) {
+        if (!params.datum) {
           const date = lastHarvestingDate
             ? new Date(lastHarvestingDate)
             : new Date();
@@ -149,7 +141,6 @@ export default class OrgReportRoute extends Route {
     async (
       params,
       sessionTimestamps,
-      fromDate,
       toDate,
       lastHarvestingDate
     ): Promise<ListData> => {
@@ -170,20 +161,6 @@ export default class OrgReportRoute extends Route {
       };
 
       try {
-        let newReport: AdminUnitCountReportModel | undefined = undefined;
-        if (params.begin) {
-          const newReports = await this.store.query('admin-unit-count-report', {
-            include:
-              'governing-body-count-report,governing-body-count-report.publication-count-report',
-            sort: '-created-at',
-            filter: {
-              ':gt:day': fromDate
-            },
-            page: { size: 1 }
-          });
-          newReport = newReports.slice()[0];
-        }
-
         const oldReports = await this.store.query('admin-unit-count-report', {
           include:
             'governing-body-count-report,governing-body-count-report.publication-count-report',
@@ -215,27 +192,6 @@ export default class OrgReportRoute extends Route {
           }
         }
 
-        if (newReport) {
-          const governingBodyCountReports =
-            await newReport.governingBodyCountReport;
-
-          for (const governingBodyCountReport of governingBodyCountReports.slice()) {
-            const publicationCountReports =
-              await governingBodyCountReport.publicationCountReport;
-
-            publicationCountReports.forEach(
-              (report: PublicationCountReportModel) => {
-                const key = uriToResultKeyMap[report.targetClass];
-                if (key) {
-                  const current = countResult[key] ?? 0;
-                  const subtract = report.get('count') ?? 0;
-                  countResult[key] = Math.max(0, current - subtract);
-                }
-              }
-            );
-          }
-        }
-
         // --- Aggregate decisions ---
         const { decisions } = await this.getDecisions.perform(
           params,
@@ -246,7 +202,7 @@ export default class OrgReportRoute extends Route {
           if (decisions) {
             return (
               decisions.reduce(
-                (sum, d) => (d.classLabel === label ? sum + d.count : sum),
+                (sum, d) => (d.classLabel === label ? d.count : sum),
                 0
               ) || 0
             );

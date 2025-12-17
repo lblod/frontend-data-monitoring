@@ -28,7 +28,13 @@
                   {{#if (eq item.valueType "number")}}
                     {{format-number item.value 0}}
                   {{else if (eq item.valueType "date")}}
-                    {{date-format item.value}}
+                    {{#if
+                      (and item.value (not-eq item.value "Niet opgegeven"))
+                    }}
+                      {{date-format item.value}}
+                    {{else}}
+                      {{item.value}}
+                    {{/if}}
                   {{else}}
                     {{item.value}}
                   {{/if}}

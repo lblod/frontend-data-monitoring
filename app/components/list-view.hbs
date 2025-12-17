@@ -46,7 +46,11 @@
         {{#if (eq row.valueType "number")}}
           {{format-number row.value 0}}
         {{else if (eq row.valueType "date")}}
-          {{date-format row.value}}
+          {{#if (and row.value (not-eq row.value "Niet opgegeven"))}}
+            {{date-format row.value}}
+          {{else}}
+            {{row.value}}
+          {{/if}}
         {{else}}
           {{row.value}}
         {{/if}}

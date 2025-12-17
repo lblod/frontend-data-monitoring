@@ -1,6 +1,6 @@
 {{#if this.isChoosingPresets}}
   <AuFormRow>
-    <AuLabel for="date-period">Selecteer een periode</AuLabel>
+    <AuLabel for="date-period">Selecteer een datum</AuLabel>
     <PowerSelect
       @selected={{this.selectedPreset}}
       @options={{this.presets}}
@@ -17,11 +17,11 @@
       @onClick={{this.chooseCustomRange}}
       class="au-u-margin-top-tiny"
     >
-      Eigen periode kiezen
+      Eigen datum kiezen
     </Filters::DateRangeFilter::ToggleButton>
   </AuFormRow>
 {{else}}
-  <AuFormRow>
+  {{!-- <AuFormRow>
     <AuLabel for="date-from">Startdatum</AuLabel>
     <Filters::DateRangeFilter::DateInput
       @value={{this.start}}
@@ -33,10 +33,10 @@
       data-test-date-range-filter-from
       data-test-date-range-filter-from-error={{this.startDateError}}
     />
-  </AuFormRow>
+  </AuFormRow> --}}
   <div>
     <AuFormRow>
-      <AuLabel for="date-to">Einddatum</AuLabel>
+      <AuLabel for="date-to">Datum</AuLabel>
       <Filters::DateRangeFilter::DateInput
         @value={{this.end}}
         @onChange={{this.handleEndDateChange}}
