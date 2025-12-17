@@ -72,7 +72,6 @@ export default class OrgReportRoute extends Route {
   };
 
   async model(params: { begin: string; eind: string }): Promise<object> {
-    const sessionTimestamps = await this.getSessionTimestamps.perform();
     const formatDate = (date: Date | string | undefined, fallback: Date) =>
       (date ? new Date(date) : fallback).toISOString().split('T')[0];
 
@@ -80,9 +79,10 @@ export default class OrgReportRoute extends Route {
     startDate.setDate(startDate.getDate() - 1);
     const fromDate = formatDate(startDate, new Date(0));
 
-    const endDate = params.eind ? new Date(params.eind) : new Date();
-    const toDate = formatDate(endDate, new Date());
+    const endDate = params.eind ? new Date(params.eind) : null;
     const lastHarvestingDate = await this.getLastHarvestingDate.perform();
+    const toDate = formatDate(endDate ?? lastHarvestingDate, new Date());
+    const sessionTimestamps = await this.getSessionTimestamps.perform(toDate);
     return {
       lastHarvestingDate,
       sessionTimestamps,
@@ -425,10 +425,13 @@ export default class OrgReportRoute extends Route {
     }
   });
 
-  getSessionTimestamps = task({ drop: true }, async () => {
+  getSessionTimestamps = task({ drop: true }, async (toDate) => {
     const sessionTimestamps = await this.store.query(
       'session-timestamp-report',
       {
+        filter: {
+          ':lt:created-at': toDate
+        },
         page: { size: 1 },
         sort: '-created-at'
       }
