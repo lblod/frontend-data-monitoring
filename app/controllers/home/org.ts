@@ -6,6 +6,7 @@ import { tracked } from '@glimmer/tracking';
 import { CountResult } from 'frontend-data-monitoring/routes/home/org';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
+import ENV from 'frontend-data-monitoring/config/environment';
 
 export default class HomeOrgReportController extends Controller {
   queryParams = ['datum'];
@@ -74,5 +75,9 @@ export default class HomeOrgReportController extends Controller {
 
   get lastHarvestingDate() {
     return this.model?.lastHarvestingDate;
+  }
+
+  get filtersEnabled() {
+    return ENV.features['filters'] === true ? true : false;
   }
 }

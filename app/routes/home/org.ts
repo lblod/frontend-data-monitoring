@@ -4,7 +4,6 @@ import Store from '@ember-data/store';
 import { inject as service } from '@ember/service';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import { task } from 'ember-concurrency';
-import AdminUnitCountReportModel from 'frontend-data-monitoring/models/admin-unit-count-report';
 import PublicationCountReportModel from 'frontend-data-monitoring/models/publication-count-report';
 import ENV from 'frontend-data-monitoring/config/environment';
 import {

@@ -24,7 +24,7 @@ module.exports = function (environment) {
       // when it is created
     },
     features: {
-      // define feature flags here
+      filters: '{{ENABLED_FILTERS}}'
     }
   };
 
@@ -35,6 +35,7 @@ module.exports = function (environment) {
     ENV.APP.rootElement = '#ember-testing';
     ENV.APP.autoboot = false;
     ENV.lokaalBeslistUrl = 'http://localhost:4201';
+    ENV.features.filters = true;
   }
 
   return ENV;
