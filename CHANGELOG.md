@@ -1,3 +1,7 @@
+## v0.0.2
+
+- Hide and disable filters in Data Monitoring Tool via environment variable
+
 ## v0.0.1
 
 - Initial commit based on copy of Lokaal beslist frontend. All credit to the authors. Mock login added; LB specific content removed etc.
