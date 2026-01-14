@@ -93,16 +93,17 @@
       class="au-u-flex au-u-flex--column au-u-flex--between au-u-flex--grow au-u-height-full"
     >
       <div class="c-interface__sidebar-main">
-        <h3 class="au-u-h4 au-u-medium">Filters</h3>
-        <Filters::DateRangeFilter
-          @startQueryParam="begin"
-          @endQueryParam="datum"
-          @start={{this.plannedStartMin}}
-          @end={{this.plannedStartMax}}
-          @startValue={{this.begin}}
-          @endValue={{this.datum}}
-        />
-
+        {{#if this.filtersEnabled}}
+          <h3 class="au-u-h4 au-u-medium">Filters</h3>
+          <Filters::DateRangeFilter
+            @startQueryParam="begin"
+            @endQueryParam="datum"
+            @start={{this.plannedStartMin}}
+            @end={{this.plannedStartMax}}
+            @startValue={{this.begin}}
+            @endValue={{this.datum}}
+          />
+        {{/if}}
       </div>
       <div class="c-interface__sidebar-footer">
         <ReportWrongData />
