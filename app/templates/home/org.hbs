@@ -33,14 +33,28 @@
           De data voor de monitoringstool wordt verzameld uit de door lokale
           overheden gepubliceerde datasets.
         </p>
-        <AuPill @skin={{this.pillSkin}} @icon="clock-rewind">Laatste harvesting
-          {{#if (date-format this.lastHarvestingDate)}}
-            op
-            {{date-format this.lastHarvestingDate}}
-          {{else}}
-            is niet opgegeven.
-          {{/if}}
-        </AuPill>
+        <div
+          class="{{if this.hasLastSuccessfulHarvest 'tooltip-wrapper'}}
+            { au-u-flex au-u-margin-left-tiny"
+        >
+          <AuPill @skin={{this.pillSkin}} @icon="clock-rewind">
+            {{#if this.hasLastSuccessfulHarvest}}
+              <EmberTooltip
+                @text="Laatste succesvolle harvesting op: {{(date-format
+                  this.model.lastHarvestingDate.lastExecutionTime
+                )}}"
+                @side="bottom"
+              />
+            {{/if}}
+            Laatste harvesting
+            {{#if (date-format this.lastHarvestingDate.lastExecutionTime)}}
+              op
+              {{date-format this.lastHarvestingDate.lastExecutionTime}}
+            {{else}}
+              is niet opgegeven.
+            {{/if}}
+          </AuPill>
+        </div>
       </section>
       <div
         class="au-u-flex au-u-flex--between au-u-flex--vertical-center au-u-padding-top"

@@ -14,6 +14,7 @@ import {
 import { getBlueprintOfDocumentType } from '@lblod/lib-decision-validation/dist/queries.js';
 import { uriToResultKeyMap } from 'frontend-data-monitoring/lib/type-utils';
 import { tracked } from '@glimmer/tracking';
+import { filter } from '@ember/object/computed';
 
 export type CountResult = {
   amountOfPublicSessions: number;
@@ -73,9 +74,15 @@ export default class OrgReportRoute extends Route {
 
     const endDate = params.datum ? new Date(params.datum) : null;
     const lastHarvestingDate = await this.getLastHarvestingDate.perform();
-    const toDate = formatDate(endDate ?? lastHarvestingDate, new Date());
+    const lastHarvestFailedDate = await this.getLastHarvestFailedDate.perform();
+    const toDate = formatDate(
+      endDate ?? lastHarvestingDate?.lastExecutionTime,
+      new Date()
+    );
+    console.log(lastHarvestingDate);
     const sessionTimestamps = await this.getSessionTimestamps.perform(toDate);
     return {
+      lastHarvestFailedDate,
       lastHarvestingDate,
       sessionTimestamps,
       data: this.getData.perform(
@@ -95,16 +102,16 @@ export default class OrgReportRoute extends Route {
 
       const resolveDate = () => {
         if (!params.datum) {
-          const date = lastHarvestingDate
-            ? new Date(lastHarvestingDate)
+          const date = lastHarvestingDate.lastExecutionTime
+            ? new Date(lastHarvestingDate.lastExecutionTime)
             : new Date();
           return date;
         }
 
         const to = new Date(toDate);
 
-        if (lastHarvestingDate) {
-          const last = new Date(lastHarvestingDate);
+        if (lastHarvestingDate.lastExecutionTime) {
+          const last = new Date(lastHarvestingDate.lastExecutionTime);
           if (to > last) {
             return last;
           }
@@ -123,16 +130,32 @@ export default class OrgReportRoute extends Route {
     }
   );
 
-  getLastHarvestingDate = task({ drop: true }, async () => {
+  getLastHarvestFailedDate = task({ drop: true }, async () => {
     const lastHarvestingExecutionRecord = await this.store.query(
       'last-harvesting-execution-record',
       {
+        filter: {
+          status: 'http://redpencil.data.gift/id/concept/JobStatus/failed'
+        },
         page: { size: 1 },
         sort: '-last-execution-time'
       }
     );
-    const lastHarvestingDate = lastHarvestingExecutionRecord.slice()[0];
-    return lastHarvestingDate?.lastExecutionTime;
+    return lastHarvestingExecutionRecord.slice()[0];
+  });
+
+  getLastHarvestingDate = task({ drop: true }, async () => {
+    const lastHarvestingExecutionRecord = await this.store.query(
+      'last-harvesting-execution-record',
+      {
+        filter: {
+          status: 'http://redpencil.data.gift/id/concept/JobStatus/success'
+        },
+        page: { size: 1 },
+        sort: '-last-execution-time'
+      }
+    );
+    return lastHarvestingExecutionRecord.slice()[0];
   });
 
   getData = task(

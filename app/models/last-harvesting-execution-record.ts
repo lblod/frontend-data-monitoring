@@ -5,6 +5,7 @@ export default class LastHarvestingExecutionRecordModel extends Model {
   @attr('string') declare uuid: string;
   @attr('date') declare createdAt: Date;
   @attr('date') declare lastExecutionTime: Date;
+  @attr('string') declare status: string;
   @attr('string') declare prefLabel: string;
   @belongsTo('administrative-unit', { inverse: null, async: true })
   declare adminUnit: AsyncBelongsTo<AdministrativeUnitModel>;
