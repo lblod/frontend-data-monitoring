@@ -7,6 +7,7 @@ import { CountResult } from 'frontend-data-monitoring/routes/home/org';
 import CurrentSessionService from 'frontend-data-monitoring/services/current-session';
 import LoketSessionService from 'frontend-data-monitoring/services/loket-session';
 import ENV from 'frontend-data-monitoring/config/environment';
+import LastHarvestingExecutionRecordModel from 'frontend-data-monitoring/models/last-harvesting-execution-record';
 
 export default class HomeOrgReportController extends Controller {
   queryParams = ['datum'];
@@ -16,11 +17,8 @@ export default class HomeOrgReportController extends Controller {
   @service declare currentSession: CurrentSessionService;
   @tracked declare model: {
     data: { isRunning: boolean; isFinished: boolean; value: CountResult };
-    lastHarvestingDate: {
-      isRunning: boolean;
-      isFinished: boolean;
-      value: Date | null;
-    };
+    lastHarvestingDate: LastHarvestingExecutionRecordModel;
+    lastHarvestFailedDate: LastHarvestingExecutionRecordModel;
   };
 
   @tracked hasFilter = false;
@@ -45,21 +43,19 @@ export default class HomeOrgReportController extends Controller {
   }
 
   get pillSkin(): string {
-    const harvestDate = this.lastHarvestingDate;
-
-    if (!(harvestDate instanceof Date)) {
+    const harvestDate = this.model?.lastHarvestingDate?.lastExecutionTime;
+    if (
+      this.model?.lastHarvestFailedDate?.lastExecutionTime >=
+      this.model?.lastHarvestingDate?.lastExecutionTime
+    ) {
+      return 'error';
+    }
+    if (!this.lastHarvestingDate) {
       return 'default';
     }
 
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    harvestDate.setHours(0, 0, 0, 0);
-
-    const diffInMs = today.getTime() - harvestDate.getTime();
-    const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
-
-    if (diffInDays >= 2) {
-      return 'error';
+    if (!(harvestDate instanceof Date)) {
+      return 'default';
     }
 
     return 'success';
@@ -74,7 +70,29 @@ export default class HomeOrgReportController extends Controller {
   }
 
   get lastHarvestingDate() {
-    return this.model?.lastHarvestingDate;
+    const { lastHarvestingDate, lastHarvestFailedDate } = this.model ?? {};
+    const harvestTime = lastHarvestingDate?.lastExecutionTime;
+    const failedTime = lastHarvestFailedDate?.lastExecutionTime;
+
+    if (!harvestTime && !failedTime) return null;
+    if (!harvestTime) return lastHarvestFailedDate;
+    if (!failedTime) return lastHarvestingDate;
+
+    return harvestTime > failedTime
+      ? lastHarvestingDate
+      : lastHarvestFailedDate;
+  }
+
+  get hasLastSuccessfulHarvest(): boolean {
+    const { lastHarvestingDate, lastHarvestFailedDate } = this.model ?? {};
+    const harvestTime = lastHarvestingDate?.lastExecutionTime;
+    const failedTime = lastHarvestFailedDate?.lastExecutionTime;
+
+    if (harvestTime && failedTime && harvestTime < failedTime) {
+      return true;
+    }
+
+    return false;
   }
 
   get filtersEnabled() {
