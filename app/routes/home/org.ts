@@ -14,7 +14,6 @@ import {
 import { getBlueprintOfDocumentType } from '@lblod/lib-decision-validation/dist/queries.js';
 import { uriToResultKeyMap } from 'frontend-data-monitoring/lib/type-utils';
 import { tracked } from '@glimmer/tracking';
-import { filter } from '@ember/object/computed';
 
 export type CountResult = {
   amountOfPublicSessions: number;
