@@ -21,7 +21,11 @@ Router.map(function () {
     this.route('switch');
   });
 
-  if (config.acmidm.clientId === '{{OAUTH_API_KEY}}') {
+  if (
+    config.mockLogin.disabled === '{{DISABLE_MOCK_LOGIN}}' ||
+    config.mockLogin.disabled === 'false' ||
+    !config.mockLogin.disabled
+  ) {
     this.route('mock-login');
   }
   this.route('switch-login');

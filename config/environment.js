@@ -19,6 +19,9 @@ module.exports = function (environment) {
       authRedirectUrl: '{{OAUTH_API_REDIRECT_URL}}',
       switchRedirectUrl: '{{OAUTH_SWITCH_URL}}'
     },
+    mockLogin: {
+      disabled: '{{DISABLE_MOCK_LOGIN}}'
+    },
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created

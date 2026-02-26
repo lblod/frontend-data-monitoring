@@ -25,6 +25,9 @@ declare const config: {
   };
   features: Record<string, boolean | string>;
   acmidm: AcmidmParams;
+  mockLogin: {
+    disabled: boolean | string;
+  };
   CORS_PROXY_URL: string;
 };
 
