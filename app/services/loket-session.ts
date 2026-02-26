@@ -8,10 +8,6 @@ export default class LoketSessionService extends SessionService<any> {
   @service declare currentSession: CurrentSessionService;
 
   get isMockLoginSession(): boolean {
-    console.log(
-      'isMockLoginSession getter from session',
-      this.data.authenticated.authenticator
-    );
     return this.isAuthenticated
       ? this.data.authenticated.authenticator === 'authenticator:mock-login'
       : false;

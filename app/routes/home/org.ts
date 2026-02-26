@@ -78,7 +78,6 @@ export default class OrgReportRoute extends Route {
       endDate ?? lastHarvestingDate?.lastExecutionTime,
       new Date()
     );
-    console.log(lastHarvestingDate);
     const sessionTimestamps = await this.getSessionTimestamps.perform(toDate);
     return {
       lastHarvestFailedDate,

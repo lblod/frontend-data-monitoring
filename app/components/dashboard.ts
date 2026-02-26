@@ -9,7 +9,6 @@ export default class DashboardComponent extends Component {
     const response = await fetch(
       'https://lokaalbeslist.lblod.info/agenda-items/search?page[size]=10&page[number]=0&filter[:has:search_location_id]=t&sort[session_planned_start.field]=desc'
     );
-    console.log('response', response);
     this.agendas = response;
   });
 
