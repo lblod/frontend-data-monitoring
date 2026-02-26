@@ -101,7 +101,7 @@ export default class OrgReportRoute extends Route {
 
       const resolveDate = () => {
         if (!params.datum) {
-          const date = lastHarvestingDate.lastExecutionTime
+          const date = lastHarvestingDate?.lastExecutionTime
             ? new Date(lastHarvestingDate.lastExecutionTime)
             : new Date();
           return date;
