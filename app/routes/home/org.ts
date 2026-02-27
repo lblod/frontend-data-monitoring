@@ -114,9 +114,9 @@ export default class OrgReportRoute extends Route {
 
         return to;
       };
-      const day = formatDay(resolveDate());
+
       const decisions = await this.store.query('decision-count-report', {
-        filter: { day },
+        filter: { day: toDate },
         page: { size: 1000 },
         sort: '-day'
       });
@@ -183,7 +183,7 @@ export default class OrgReportRoute extends Route {
             'governing-body-count-report,governing-body-count-report.publication-count-report',
           sort: '-created-at',
           filter: {
-            ':lt:day': toDate
+            ':lte:day': toDate
           },
           page: { size: 1 }
         });
@@ -403,7 +403,7 @@ export default class OrgReportRoute extends Route {
       'session-timestamp-report',
       {
         filter: {
-          ':lt:created-at': toDate
+          ':lte:created-at': toDate
         },
         page: { size: 1 },
         sort: '-created-at'
